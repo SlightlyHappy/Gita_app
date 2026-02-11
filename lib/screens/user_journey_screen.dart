@@ -1,13 +1,17 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../models/achievement_model.dart';
+import '../models/reading_session_model.dart';
 import '../providers/app_state_provider.dart';
 import '../utils/constants.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/cosmic_background.dart';
 
 /// User Journey / Progress page — accessible via profile button on home screen.
-/// Displays reading progress, meditation streak, achievements, and timeline.
+/// Displays real reading progress, streak, achievements with progress,
+/// reading stats, and timeline from actual data.
 class UserJourneyScreen extends StatelessWidget {
   const UserJourneyScreen({super.key});
 
@@ -26,21 +30,29 @@ class UserJourneyScreen extends StatelessWidget {
                     child: _buildHeader(context, appState),
                   ),
 
-                  // ── Meditation Streak ──
+                  // ── Stats Overview ──
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
-                      child: _StreakCard(streak: appState.meditationStreak),
+                      child: _StatsOverview(appState: appState),
                     ),
                   ),
 
-                  // ── Active Journeys ──
+                  // ── Consecutive Days Streak ──
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+                      child:
+                          _StreakCard(streak: appState.consecutiveDays),
+                    ),
+                  ),
+
+                  // ── Active Journeys (Chapter Progress) ──
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
                       child: _SectionHeader(
                         title: AppStrings.activeJourneys,
-                        trailing: 'View All',
                       ),
                     ),
                   ),
@@ -63,7 +75,23 @@ class UserJourneyScreen extends StatelessWidget {
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
-                      child: _AchievementsBadges(appState: appState),
+                      child: _AchievementsGrid(appState: appState),
+                    ),
+                  ),
+
+                  // ── Reading Time by Chapter ──
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+                      child: _SectionHeader(
+                        title: 'Reading Time',
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+                      child: _ReadingTimeSection(appState: appState),
                     ),
                   ),
 
@@ -132,7 +160,6 @@ class UserJourneyScreen extends StatelessWidget {
                     size: 28,
                   ),
                 ),
-                // Verified badge
                 Positioned(
                   bottom: 0,
                   right: 0,
@@ -179,18 +206,82 @@ class UserJourneyScreen extends StatelessWidget {
               ],
             ),
           ),
-
-          // Settings
-          GlassCard(
-            borderRadius: 9999,
-            padding: const EdgeInsets.all(10),
-            child: const Icon(
-              Icons.settings,
-              color: AppColors.primary,
-              size: 20,
-            ),
-          ),
         ],
+      ),
+    );
+  }
+}
+
+// ─── Stats Overview ─────────────────────────────────────────────────────────
+
+class _StatsOverview extends StatelessWidget {
+  final AppStateProvider appState;
+
+  const _StatsOverview({required this.appState});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _StatTile(
+          label: 'Verses Read',
+          value: '${appState.totalVersesRead}',
+          icon: Icons.menu_book,
+        ),
+        const SizedBox(width: 12),
+        _StatTile(
+          label: 'Chapters',
+          value: '${appState.chaptersStarted}/18',
+          icon: Icons.library_books,
+        ),
+        const SizedBox(width: 12),
+        _StatTile(
+          label: 'Bookmarks',
+          value: '${appState.favoriteKeys.length}',
+          icon: Icons.bookmark,
+        ),
+      ],
+    );
+  }
+}
+
+class _StatTile extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData icon;
+
+  const _StatTile({
+    required this.label,
+    required this.value,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GlassCard(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        child: Column(
+          children: [
+            Icon(icon, color: AppColors.primary, size: 22),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: AppTextStyles.h3.copyWith(
+                color: AppColors.textWhite,
+                fontSize: 18,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.textWhite40,
+                fontSize: 10,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -213,7 +304,6 @@ class _StreakCard extends StatelessWidget {
       featured: true,
       child: Stack(
         children: [
-          // Background fire icon watermark
           Positioned(
             right: -10,
             bottom: -20,
@@ -225,7 +315,6 @@ class _StreakCard extends StatelessWidget {
           ),
           Row(
             children: [
-              // Left: Streak info
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -236,7 +325,7 @@ class _StreakCard extends StatelessWidget {
                             color: AppColors.primary, size: 22),
                         const SizedBox(width: 8),
                         Text(
-                          AppStrings.meditationStreak,
+                          'CONSECUTIVE DAYS',
                           style: AppTextStyles.sectionLabel.copyWith(
                             color: AppColors.primary.withAlpha(178),
                             fontSize: 10,
@@ -267,8 +356,6 @@ class _StreakCard extends StatelessWidget {
                   ],
                 ),
               ),
-
-              // Right: Progress to milestone
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -321,30 +408,16 @@ class _StreakCard extends StatelessWidget {
 
 class _SectionHeader extends StatelessWidget {
   final String title;
-  final String? trailing;
 
-  const _SectionHeader({required this.title, this.trailing});
+  const _SectionHeader({required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(title, style: AppTextStyles.h3),
-        if (trailing != null)
-          Text(
-            trailing!,
-            style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.primary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-      ],
-    );
+    return Text(title, style: AppTextStyles.h3);
   }
 }
 
-// ─── Active Journeys (Horizontal Cards with Progress Rings) ─────────────────
+// ─── Active Journeys (Real Chapter Progress) ────────────────────────────────
 
 class _ActiveJourneysList extends StatelessWidget {
   final AppStateProvider appState;
@@ -354,28 +427,57 @@ class _ActiveJourneysList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chapters = appState.chapters ?? [];
-    // Show first 5 chapters as active journeys
-    final journeyChapters = chapters.take(5).toList();
+    // Show chapters that have progress, or first 5 if none started
+    final progressChapters = chapters.where((c) {
+      final p = appState.chapterProgressMap[c.chapterNumber];
+      return p != null && p.versesRead.isNotEmpty;
+    }).toList();
+
+    final displayChapters =
+        progressChapters.isNotEmpty ? progressChapters : chapters.take(5).toList();
+
+    if (displayChapters.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: GlassCard(
+          padding: const EdgeInsets.all(24),
+          child: Center(
+            child: Text(
+              'Start reading to see your progress here.',
+              style: AppTextStyles.bodySmall
+                  .copyWith(color: AppColors.textWhite40),
+            ),
+          ),
+        ),
+      );
+    }
 
     return SizedBox(
       height: 190,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 24),
-        itemCount: journeyChapters.length,
+        itemCount: displayChapters.length,
         separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
-          final chapter = journeyChapters[index];
-          final completed =
-              appState.chaptersCompleted.contains(chapter.chapterNumber);
-          final progress = completed ? 1.0 : (index == 0 ? 0.8 : index == 1 ? 0.45 : 0.1);
-          final isHighlighted = index == 1;
+          final chapter = displayChapters[index];
+          final versesRead =
+              appState.getVersesReadCount(chapter.chapterNumber);
+          final totalVerses = chapter.versesCount;
+          final progress = totalVerses > 0
+              ? (versesRead / totalVerses).clamp(0.0, 1.0)
+              : 0.0;
+          final timeSpent =
+              appState.getChapterTimeFormatted(chapter.chapterNumber);
 
           return _JourneyCard(
             chapterName: chapter.name,
             chapterNumber: chapter.chapterNumber,
             progress: progress,
-            isHighlighted: isHighlighted,
+            versesRead: versesRead,
+            totalVerses: totalVerses,
+            timeSpent: timeSpent,
+            isHighlighted: progress > 0 && progress < 1.0,
           );
         },
       ),
@@ -387,12 +489,18 @@ class _JourneyCard extends StatelessWidget {
   final String chapterName;
   final int chapterNumber;
   final double progress;
+  final int versesRead;
+  final int totalVerses;
+  final String timeSpent;
   final bool isHighlighted;
 
   const _JourneyCard({
     required this.chapterName,
     required this.chapterNumber,
     required this.progress,
+    required this.versesRead,
+    required this.totalVerses,
+    required this.timeSpent,
     this.isHighlighted = false,
   });
 
@@ -416,8 +524,8 @@ class _JourneyCard extends StatelessWidget {
         children: [
           // Progress ring
           SizedBox(
-            width: 80,
-            height: 80,
+            width: 72,
+            height: 72,
             child: CustomPaint(
               painter: _ProgressRingPainter(
                 progress: progress,
@@ -428,14 +536,14 @@ class _JourneyCard extends StatelessWidget {
                 child: Text(
                   '${(progress * 100).round()}%',
                   style: AppTextStyles.h3.copyWith(
-                    fontSize: 16,
+                    fontSize: 14,
                     color: AppColors.primary,
                   ),
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
 
           // Chapter name
           Text(
@@ -443,6 +551,7 @@ class _JourneyCard extends StatelessWidget {
             style: AppTextStyles.bodySmall.copyWith(
               color: AppColors.textWhite70,
               fontWeight: FontWeight.w500,
+              fontSize: 11,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -450,17 +559,27 @@ class _JourneyCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
 
-          // Status
+          // Verses read
           Text(
-            progress >= 1.0 ? 'COMPLETED' : 'CHAPTER $chapterNumber',
+            '$versesRead/$totalVerses verses',
             style: AppTextStyles.sectionLabel.copyWith(
-              color: progress >= 1.0
-                  ? AppColors.success
-                  : AppColors.primary,
+              color: AppColors.textWhite40,
               fontSize: 9,
-              letterSpacing: 1.5,
             ),
           ),
+
+          // Time spent
+          if (timeSpent != '0m')
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Text(
+                timeSpent,
+                style: AppTextStyles.sectionLabel.copyWith(
+                  color: AppColors.primary.withAlpha(178),
+                  fontSize: 9,
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -485,14 +604,12 @@ class _ProgressRingPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 4;
 
-    // Track
     final trackPaint = Paint()
       ..color = trackColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6;
     canvas.drawCircle(center, radius, trackPaint);
 
-    // Progress arc
     final progressPaint = Paint()
       ..color = primaryColor
       ..style = PaintingStyle.stroke
@@ -509,131 +626,375 @@ class _ProgressRingPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_ProgressRingPainter old) =>
-      old.progress != progress;
+  bool shouldRepaint(_ProgressRingPainter old) => old.progress != progress;
 }
 
-// ─── Achievement Badges ─────────────────────────────────────────────────────
+// ─── Achievements Grid (All 10 with Progress) ──────────────────────────────
 
-class _AchievementsBadges extends StatelessWidget {
+class _AchievementsGrid extends StatelessWidget {
   final AppStateProvider appState;
 
-  const _AchievementsBadges({required this.appState});
+  const _AchievementsGrid({required this.appState});
 
   @override
   Widget build(BuildContext context) {
-    final achievements = [
-      _AchievementData(
-        icon: Icons.auto_awesome,
-        label: 'First Verse',
-        isEarned: appState.favoriteKeys.isNotEmpty,
-        gradient: const [AppColors.primary, Color(0xFFF97316)],
-      ),
-      _AchievementData(
-        icon: Icons.self_improvement,
-        label: 'Zen Master',
-        isEarned: appState.meditationStreak >= 7,
-        gradient: const [AppColors.primary, Color(0xFFFBBF24)],
-      ),
-      _AchievementData(
-        icon: Icons.workspace_premium,
-        label: '100 Days',
-        isEarned: appState.meditationStreak >= 100,
-        gradient: const [AppColors.primary, Color(0xFFF97316)],
-      ),
-      _AchievementData(
-        icon: Icons.stars,
-        label: 'Sage Status',
-        isEarned: appState.chaptersCompleted.length >= 18,
-        gradient: const [AppColors.primary, Color(0xFFFBBF24)],
-      ),
-    ];
+    final achievements = appState.achievements;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: achievements
-          .map((a) => _AchievementBadge(data: a))
-          .toList(),
+    if (achievements.isEmpty) {
+      return GlassCard(
+        padding: const EdgeInsets.all(24),
+        child: Center(
+          child: Text(
+            'Start reading to unlock achievements!',
+            style:
+                AppTextStyles.bodySmall.copyWith(color: AppColors.textWhite40),
+          ),
+        ),
+      );
+    }
+
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      children:
+          achievements.map((a) => _AchievementTile(achievement: a, appState: appState)).toList(),
     );
   }
 }
 
-class _AchievementData {
-  final IconData icon;
-  final String label;
-  final bool isEarned;
-  final List<Color> gradient;
+class _AchievementTile extends StatelessWidget {
+  final Achievement achievement;
+  final AppStateProvider appState;
 
-  const _AchievementData({
-    required this.icon,
-    required this.label,
-    required this.isEarned,
-    required this.gradient,
-  });
-}
+  const _AchievementTile({required this.achievement, required this.appState});
 
-class _AchievementBadge extends StatelessWidget {
-  final _AchievementData data;
+  String _getProgressText() {
+    switch (achievement.id) {
+      case 'first_step':
+        return appState.totalVersesRead > 0 ? 'Done!' : '0/1 verse';
+      case 'chapter_master':
+        final completed = appState.chaptersCompleted.length;
+        return '$completed/1 chapter';
+      case 'seeker':
+        return '${appState.chaptersStarted}/5 chapters';
+      case 'devoted_learner':
+        return '${appState.chaptersStarted}/10 chapters';
+      case 'wisdom_warrior':
+        return '${appState.chaptersStarted}/15 chapters';
+      case 'complete_knowledge':
+        return '${appState.chaptersStarted}/18 chapters';
+      case 'seven_day_sage':
+        return '${appState.consecutiveDays}/7 days';
+      case 'thirty_day_saint':
+        return '${appState.consecutiveDays}/30 days';
+      case 'bookmark_collector':
+        return '${appState.favoriteKeys.length}/10 bookmarks';
+      case 'shared_wisdom':
+        return appState.shareCount > 0 ? 'Done!' : '0/1 share';
+      default:
+        return '';
+    }
+  }
 
-  const _AchievementBadge({required this.data});
+  double _getProgressFraction() {
+    switch (achievement.id) {
+      case 'first_step':
+        return appState.totalVersesRead > 0 ? 1.0 : 0.0;
+      case 'chapter_master':
+        return appState.chaptersCompleted.isNotEmpty ? 1.0 : 0.0;
+      case 'seeker':
+        return (appState.chaptersStarted / 5).clamp(0.0, 1.0);
+      case 'devoted_learner':
+        return (appState.chaptersStarted / 10).clamp(0.0, 1.0);
+      case 'wisdom_warrior':
+        return (appState.chaptersStarted / 15).clamp(0.0, 1.0);
+      case 'complete_knowledge':
+        return (appState.chaptersStarted / 18).clamp(0.0, 1.0);
+      case 'seven_day_sage':
+        return (appState.consecutiveDays / 7).clamp(0.0, 1.0);
+      case 'thirty_day_saint':
+        return (appState.consecutiveDays / 30).clamp(0.0, 1.0);
+      case 'bookmark_collector':
+        return (appState.favoriteKeys.length / 10).clamp(0.0, 1.0);
+      case 'shared_wisdom':
+        return appState.shareCount > 0 ? 1.0 : 0.0;
+      default:
+        return 0.0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: data.isEarned ? 1.0 : 0.4,
+    final isUnlocked = achievement.isUnlocked;
+    final progressFraction = _getProgressFraction();
+    final progressText = _getProgressText();
+
+    return GestureDetector(
+      onTap: () => _showAchievementDetail(context),
+      child: SizedBox(
+        width: (MediaQuery.of(context).size.width - 60) / 2,
+        child: GlassCard(
+          padding: const EdgeInsets.all(16),
+          borderColor: isUnlocked
+              ? AppColors.primary.withAlpha(80)
+              : AppColors.glassBorderLight,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    achievement.emoji,
+                    style: const TextStyle(fontSize: 28),
+                  ),
+                  const Spacer(),
+                  if (isUnlocked)
+                    Icon(Icons.check_circle,
+                        size: 18, color: AppColors.primary),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                achievement.name,
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: isUnlocked
+                      ? AppColors.textWhite
+                      : AppColors.textWhite60,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                achievement.description,
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.textWhite40,
+                  fontSize: 11,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 10),
+              // Progress bar
+              if (!isUnlocked) ...[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(3),
+                  child: LinearProgressIndicator(
+                    value: progressFraction,
+                    backgroundColor: AppColors.textWhite.withAlpha(25),
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(AppColors.primary),
+                    minHeight: 4,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  progressText,
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.textWhite40,
+                    fontSize: 9,
+                  ),
+                ),
+              ],
+              if (isUnlocked && achievement.unlockedAt != null)
+                Text(
+                  'Unlocked ${DateFormat.yMMMd().format(achievement.unlockedAt!)}',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.primary.withAlpha(178),
+                    fontSize: 9,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showAchievementDetail(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Container(
+        decoration: const BoxDecoration(
+          color: Color(0xFF1A1A2E),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.textWhite20,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              achievement.emoji,
+              style: const TextStyle(fontSize: 48),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              achievement.name,
+              style: AppTextStyles.h2,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              achievement.description,
+              style: AppTextStyles.bodyMedium
+                  .copyWith(color: AppColors.textWhite60),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            if (achievement.isUnlocked && achievement.unlockedAt != null)
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryGhost,
+                  borderRadius: BorderRadius.circular(9999),
+                ),
+                child: Text(
+                  'Unlocked on ${DateFormat.yMMMMd().format(achievement.unlockedAt!)}',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            if (!achievement.isUnlocked) ...[
+              Text(
+                _getProgressText(),
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: 200,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: _getProgressFraction(),
+                    backgroundColor: AppColors.textWhite.withAlpha(25),
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(AppColors.primary),
+                    minHeight: 6,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Reading Time Section ───────────────────────────────────────────────────
+
+class _ReadingTimeSection extends StatelessWidget {
+  final AppStateProvider appState;
+
+  const _ReadingTimeSection({required this.appState});
+
+  @override
+  Widget build(BuildContext context) {
+    final chaptersWithTime = <int>[];
+    for (int i = 1; i <= 18; i++) {
+      final progress = appState.chapterProgressMap[i];
+      if (progress != null && progress.totalTimeSeconds > 0) {
+        chaptersWithTime.add(i);
+      }
+    }
+
+    if (chaptersWithTime.isEmpty) {
+      return GlassCard(
+        padding: const EdgeInsets.all(20),
+        child: Center(
+          child: Text(
+            'Start reading chapters to track time spent.',
+            style:
+                AppTextStyles.bodySmall.copyWith(color: AppColors.textWhite40),
+          ),
+        ),
+      );
+    }
+
+    // Sort by most time spent
+    chaptersWithTime.sort((a, b) {
+      final ta = appState.chapterProgressMap[a]!.totalTimeSeconds;
+      final tb = appState.chapterProgressMap[b]!.totalTimeSeconds;
+      return tb.compareTo(ta);
+    });
+
+    // Find max for bar chart scaling
+    final maxTime =
+        appState.chapterProgressMap[chaptersWithTime.first]!.totalTimeSeconds;
+
+    return GlassCard(
+      padding: const EdgeInsets.all(16),
       child: Column(
-        children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: data.isEarned
-                  ? LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: data.gradient,
-                    )
-                  : null,
-              color: data.isEarned ? null : AppColors.glassBg,
-              border: data.isEarned
-                  ? null
-                  : Border.all(color: AppColors.glassBorderLight),
-              boxShadow: data.isEarned
-                  ? [
-                      BoxShadow(
-                        color: AppColors.primary.withAlpha(76),
-                        blurRadius: 16,
-                      ),
-                    ]
-                  : null,
+        children: chaptersWithTime.map((chNum) {
+          final progress = appState.chapterProgressMap[chNum]!;
+          final fraction =
+              maxTime > 0 ? progress.totalTimeSeconds / maxTime : 0.0;
+          final timeStr = appState.getChapterTimeFormatted(chNum);
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 50,
+                  child: Text(
+                    'Ch $chNum',
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.textWhite60,
+                      fontSize: 11,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(3),
+                    child: LinearProgressIndicator(
+                      value: fraction,
+                      backgroundColor: AppColors.textWhite.withAlpha(20),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(AppColors.primary),
+                      minHeight: 8,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                SizedBox(
+                  width: 40,
+                  child: Text(
+                    timeStr,
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 10,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ],
             ),
-            child: Icon(
-              data.icon,
-              size: 28,
-              color: data.isEarned
-                  ? AppColors.backgroundDark
-                  : AppColors.textWhite.withAlpha(128),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            data.label,
-            style: AppTextStyles.bodySmall.copyWith(
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
-              color: data.isEarned
-                  ? AppColors.textWhite70
-                  : AppColors.textWhite40,
-            ),
-          ),
-        ],
+          );
+        }).toList(),
       ),
     );
   }
 }
 
-// ─── Wisdom Timeline ────────────────────────────────────────────────────────
+// ─── Wisdom Timeline (from real reading sessions) ──────────────────────────
 
 class _WisdomTimeline extends StatelessWidget {
   final AppStateProvider appState;
@@ -642,221 +1003,156 @@ class _WisdomTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final completedCount = appState.chaptersCompleted.length;
+    final sessions = appState.readingSessions;
 
-    // Build timeline nodes
-    final nodes = <_TimelineNodeData>[
-      if (completedCount > 0)
-        _TimelineNodeData(
-          status: _NodeStatus.completed,
-          title: 'The Way of Knowledge',
-          description: 'You completed your first chapter and began your journey of wisdom.',
-          date: 'Completed',
-          icon: Icons.check,
+    if (sessions.isEmpty) {
+      return GlassCard(
+        padding: const EdgeInsets.all(24),
+        child: Center(
+          child: Column(
+            children: [
+              Icon(Icons.timeline, size: 40, color: AppColors.textWhite20),
+              const SizedBox(height: 12),
+              Text(
+                'Your reading journey will appear here.',
+                style: AppTextStyles.bodySmall
+                    .copyWith(color: AppColors.textWhite40),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
-      _TimelineNodeData(
-        status: completedCount > 0
-            ? _NodeStatus.inProgress
-            : _NodeStatus.inProgress,
-        title: 'Path of Understanding',
-        description: 'Continue exploring the verses to deepen your understanding.',
-        date: 'In Progress',
-        icon: Icons.play_arrow,
-        showContinueButton: true,
-      ),
-      _TimelineNodeData(
-        status: _NodeStatus.locked,
-        title: 'Mastery of Action',
-        description: 'Unlock by completing more chapters.',
-        date: 'Locked',
-        icon: Icons.lock,
-      ),
-    ];
+      );
+    }
+
+    // Group sessions by day
+    final grouped = <String, List<VerseReadingSession>>{};
+    for (final s in sessions) {
+      final dayKey = DateFormat.yMMMd().format(s.readAt.toLocal());
+      grouped.putIfAbsent(dayKey, () => []).add(s);
+    }
+
+    // Sort days descending (most recent first)
+    final sortedDays = grouped.keys.toList()
+      ..sort((a, b) {
+        final da = DateFormat.yMMMd().parse(a);
+        final db = DateFormat.yMMMd().parse(b);
+        return db.compareTo(da);
+      });
+
+    // Take last 10 days max
+    final displayDays = sortedDays.take(10).toList();
 
     return Column(
       children: [
-        for (int i = 0; i < nodes.length; i++)
-          _TimelineNode(
-            data: nodes[i],
-            isLast: i == nodes.length - 1,
+        for (int i = 0; i < displayDays.length; i++)
+          _TimelineDay(
+            dateLabel: displayDays[i],
+            sessions: grouped[displayDays[i]]!,
+            isLast: i == displayDays.length - 1,
           ),
       ],
     );
   }
 }
 
-enum _NodeStatus { completed, inProgress, locked }
-
-class _TimelineNodeData {
-  final _NodeStatus status;
-  final String title;
-  final String description;
-  final String date;
-  final IconData icon;
-  final bool showContinueButton;
-
-  const _TimelineNodeData({
-    required this.status,
-    required this.title,
-    required this.description,
-    required this.date,
-    required this.icon,
-    this.showContinueButton = false,
-  });
-}
-
-class _TimelineNode extends StatelessWidget {
-  final _TimelineNodeData data;
+class _TimelineDay extends StatelessWidget {
+  final String dateLabel;
+  final List<VerseReadingSession> sessions;
   final bool isLast;
 
-  const _TimelineNode({required this.data, required this.isLast});
+  const _TimelineDay({
+    required this.dateLabel,
+    required this.sessions,
+    required this.isLast,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final isLocked = data.status == _NodeStatus.locked;
+    // Group by chapter
+    final byChapter = <int, int>{};
+    for (final s in sessions) {
+      byChapter[s.chapterNumber] = (byChapter[s.chapterNumber] ?? 0) + 1;
+    }
 
-    return Opacity(
-      opacity: isLocked ? 0.4 : 1.0,
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Timeline spine
-            SizedBox(
-              width: 40,
-              child: Column(
-                children: [
-                  // Node circle
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: data.status == _NodeStatus.completed
-                          ? AppColors.primary
-                          : data.status == _NodeStatus.inProgress
-                              ? AppColors.primary
-                              : AppColors.glassBg,
-                      border: data.status == _NodeStatus.inProgress
-                          ? Border.all(
-                              color: AppColors.backgroundDark,
-                              width: 3,
-                            )
-                          : isLocked
-                              ? Border.all(
-                                  color: AppColors.glassBorderLight)
-                              : null,
-                      boxShadow: data.status != _NodeStatus.locked
-                          ? [
-                              BoxShadow(
-                                color: AppColors.primary.withAlpha(76),
-                                blurRadius: 12,
-                              ),
-                            ]
-                          : null,
-                    ),
-                    child: Icon(
-                      data.icon,
-                      size: 16,
-                      color: isLocked
-                          ? AppColors.textWhite.withAlpha(128)
-                          : AppColors.backgroundDark,
+    final chapterSummaries = byChapter.entries
+        .map((e) => 'Ch ${e.key}: ${e.value} verse${e.value > 1 ? 's' : ''}')
+        .join(', ');
+
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Timeline spine
+          SizedBox(
+            width: 40,
+            child: Column(
+              children: [
+                Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.primary,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withAlpha(76),
+                        blurRadius: 12,
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.check,
+                    size: 14,
+                    color: AppColors.backgroundDark,
+                  ),
+                ),
+                if (!isLast)
+                  Expanded(
+                    child: Container(
+                      width: 2,
+                      margin: const EdgeInsets.symmetric(vertical: 4),
+                      color: AppColors.primary.withAlpha(76),
                     ),
                   ),
-                  // Connecting line
-                  if (!isLast)
-                    Expanded(
-                      child: Container(
-                        width: 2,
-                        margin: const EdgeInsets.symmetric(vertical: 4),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            left: BorderSide(
-                              color: AppColors.primary.withAlpha(76),
-                              width: 2,
-                              style: BorderStyle.solid,
-                            ),
-                          ),
-                        ),
-                      ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+
+          // Content
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    dateLabel,
+                    style: AppTextStyles.sectionLabel.copyWith(
+                      color: AppColors.primary.withAlpha(153),
+                      fontSize: 9,
                     ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Read ${sessions.length} verse${sessions.length > 1 ? 's' : ''}',
+                    style: AppTextStyles.h3.copyWith(fontSize: 14),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    chapterSummaries,
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.textWhite60,
+                      fontSize: 11,
+                      height: 1.4,
+                    ),
+                  ),
                 ],
               ),
             ),
-            const SizedBox(width: 12),
-
-            // Content
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 20),
-                padding: data.status == _NodeStatus.inProgress
-                    ? const EdgeInsets.all(16)
-                    : null,
-                decoration: data.status == _NodeStatus.inProgress
-                    ? BoxDecoration(
-                        color: AppColors.primary.withAlpha(13),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: AppColors.primary.withAlpha(128),
-                        ),
-                      )
-                    : null,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data.date,
-                      style: AppTextStyles.sectionLabel.copyWith(
-                        color: AppColors.primary.withAlpha(153),
-                        fontSize: 9,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      data.title,
-                      style: AppTextStyles.h3.copyWith(fontSize: 15),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      data.description,
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.textWhite60,
-                        height: 1.5,
-                      ),
-                    ),
-                    if (data.showContinueButton) ...[
-                      const SizedBox(height: 14),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.primary.withAlpha(76),
-                              blurRadius: 16,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Text(
-                            'CONTINUE JOURNEY',
-                            style: AppTextStyles.buttonText.copyWith(
-                              fontSize: 12,
-                              letterSpacing: 1.5,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

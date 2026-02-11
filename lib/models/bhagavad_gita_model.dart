@@ -51,6 +51,7 @@ class Verse {
   final String meaning;
   final String commentary;
   final List<VerseTranslation> translations;
+  final List<WordMeaning> wordMeanings;
 
   Verse({
     required this.id,
@@ -61,9 +62,40 @@ class Verse {
     required this.meaning,
     required this.commentary,
     this.translations = const [],
+    this.wordMeanings = const [],
   });
 
+  /// Returns the preferred (primary) translation — defaults to first available.
+  VerseTranslation? get preferredTranslation {
+    if (translations.isEmpty) return null;
+    // Prefer Swami Prabhupada
+    final prabhupada = translations.firstWhere(
+      (t) => t.authorName.toLowerCase().contains('prabhupada'),
+      orElse: () => translations.first,
+    );
+    return prabhupada;
+  }
+
+  /// Returns all translations other than the preferred one.
+  List<VerseTranslation> get alternativeTranslations {
+    final pref = preferredTranslation;
+    if (pref == null) return [];
+    return translations.where((t) => t.id != pref.id).toList();
+  }
+
   factory Verse.fromJson(Map<String, dynamic> json) {
+    // Parse word_meanings — API returns a string like "word1—meaning1; word2—meaning2"
+    // or sometimes a list of objects
+    List<WordMeaning> parsedWordMeanings = [];
+    final wm = json['word_meanings'];
+    if (wm is String && wm.isNotEmpty) {
+      parsedWordMeanings = WordMeaning.parseFromString(wm);
+    } else if (wm is List) {
+      parsedWordMeanings = wm
+          .map((w) => WordMeaning.fromJson(w as Map<String, dynamic>))
+          .toList();
+    }
+
     return Verse(
       id: json['id'] ?? 0,
       chapterNumber: json['chapter_number'] ?? 0,
@@ -76,6 +108,7 @@ class Verse {
               ?.map((t) => VerseTranslation.fromJson(t as Map<String, dynamic>))
               .toList() ??
           [],
+      wordMeanings: parsedWordMeanings,
     );
   }
 
@@ -89,6 +122,7 @@ class Verse {
       'meaning': meaning,
       'commentary': commentary,
       'translations': translations.map((t) => t.toJson()).toList(),
+      'word_meanings': wordMeanings.map((w) => w.toJson()).toList(),
     };
   }
 }
@@ -122,5 +156,56 @@ class VerseTranslation {
       'author_name': authorName,
       'language': language,
     };
+  }
+}
+
+class WordMeaning {
+  final String word;
+  final String meaning;
+  final String? transliteration;
+
+  WordMeaning({
+    required this.word,
+    required this.meaning,
+    this.transliteration,
+  });
+
+  factory WordMeaning.fromJson(Map<String, dynamic> json) {
+    return WordMeaning(
+      word: json['word'] ?? '',
+      meaning: json['meaning'] ?? '',
+      transliteration: json['transliteration'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'word': word,
+      'meaning': meaning,
+      if (transliteration != null) 'transliteration': transliteration,
+    };
+  }
+
+  /// Parse word meanings from the API's semicolon-delimited string format.
+  /// Example: "śrī-bhagavān uvāca—the Supreme Personality of Godhead said; imaṁ—this"
+  static List<WordMeaning> parseFromString(String raw) {
+    final entries = raw.split(';');
+    final results = <WordMeaning>[];
+    for (final entry in entries) {
+      final trimmed = entry.trim();
+      if (trimmed.isEmpty) continue;
+      // Try splitting by em-dash first, then regular dash
+      final dashIndex = trimmed.indexOf('—');
+      if (dashIndex > 0) {
+        results.add(WordMeaning(
+          word: trimmed.substring(0, dashIndex).trim(),
+          meaning: trimmed.substring(dashIndex + 1).trim(),
+        ));
+      } else {
+        // Fallback: treat the whole thing as a word
+        results.add(WordMeaning(word: trimmed, meaning: ''));
+      }
+    }
+    return results;
   }
 }

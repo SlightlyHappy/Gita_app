@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../models/bhagavad_gita_model.dart';
 import '../providers/app_state_provider.dart';
 import '../services/api_service.dart';
@@ -19,6 +20,7 @@ class VerseDetailScreen extends StatefulWidget {
 
 class _VerseDetailScreenState extends State<VerseDetailScreen> {
   List<Verse> _relatedVerses = [];
+  int _selectedTranslationIndex = 0;
 
   @override
   void initState() {
@@ -45,7 +47,7 @@ class _VerseDetailScreenState extends State<VerseDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AppStateProvider>(context);
-    final isFav = provider.isFavorite(
+    final isFav = provider.isBookmarked(
         widget.verse.chapterNumber, widget.verse.verseNumber);
 
     return Scaffold(
@@ -96,12 +98,12 @@ class _VerseDetailScreenState extends State<VerseDetailScreen> {
                     GlassCard(
                       borderRadius: 9999,
                       padding: const EdgeInsets.all(10),
-                      onTap: () => provider.toggleFavorite(
+                      onTap: () => provider.toggleBookmark(
                         widget.verse.chapterNumber,
                         widget.verse.verseNumber,
                       ),
                       child: Icon(
-                        isFav ? Icons.favorite : Icons.favorite_border,
+                        isFav ? Icons.bookmark : Icons.bookmark_border,
                         color: isFav ? AppColors.primary : AppColors.textWhite,
                         size: 20,
                       ),
@@ -119,6 +121,26 @@ class _VerseDetailScreenState extends State<VerseDetailScreen> {
                     children: [
                       // ── Verse Card ──
                       _buildVerseCard(),
+
+                      const SizedBox(height: 24),
+
+                      // ── Word Meanings (collapsible) ──
+                      if (widget.verse.wordMeanings.isNotEmpty)
+                        _buildWordMeanings(),
+
+                      // ── Translation Pills + Content ──
+                      if (widget.verse.translations.isNotEmpty) ...[
+                        const SizedBox(height: 24),
+                        _buildTranslationPills(),
+                        const SizedBox(height: 16),
+                        _buildSelectedTranslation(),
+                      ],
+
+                      // ── Meaning (if available) ──
+                      if (widget.verse.meaning.isNotEmpty) ...[
+                        const SizedBox(height: 24),
+                        _buildMeaningSection(),
+                      ],
 
                       const SizedBox(height: 24),
 
@@ -216,167 +238,288 @@ class _VerseDetailScreenState extends State<VerseDetailScreen> {
         ),
 
         const SizedBox(height: 20),
-
-        // ── Translations Grid ──
-        ..._buildTranslationCards(),
       ],
     );
   }
 
-  List<Widget> _buildTranslationCards() {
-    final translations = widget.verse.translations;
-    
-    if (translations.isEmpty) {
-      return [
-        GlassCard(
-          padding: const EdgeInsets.all(20),
-          child: Center(
-            child: Text(
-              'Loading translations...',
-              style: AppTextStyles.bodySmall.copyWith(color: AppColors.textWhite60),
-            ),
-          ),
-        ),
-      ];
-    }
-
-    // Separate translations by language
-    final english = translations.firstWhere(
-      (t) => t.language == 'english',
-      orElse: () => VerseTranslation(id: 0, description: '', authorName: '', language: ''),
-    );
-    
-    final hindi = translations.firstWhere(
-      (t) => t.language == 'hindi',
-      orElse: () => VerseTranslation(id: 0, description: '', authorName: '', language: ''),
-    );
-    
-    final others = translations
-        .where((t) => t.language != 'sanskrit' && t.language != 'english' && t.language != 'hindi')
-        .toList();
-
-    var cards = <Widget>[];
-
-    // English Translation
-    if (english.description.isNotEmpty) {
-      cards.add(
-        _buildTranslationCard(
-          title: 'ENGLISH TRANSLATION',
-          text: english.description,
-          author: english.authorName,
-          color: Colors.blue,
-          icon: Icons.abc,
-        ),
-      );
-    }
-
-    // Hindi Translation
-    if (hindi.description.isNotEmpty) {
-      cards.add(
-        _buildTranslationCard(
-          title: 'हिंदी अनुवाद (HINDI)',
-          text: hindi.description,
-          author: hindi.authorName,
-          color: Colors.orange,
-          icon: Icons.language,
-        ),
-      );
-    }
-
-    // Other translations
-    for (var i = 0; i < others.length && i < 2; i++) {
-      final trans = others[i];
-      cards.add(
-        _buildTranslationCard(
-          title: trans.language.toUpperCase(),
-          text: trans.description,
-          author: trans.authorName,
-          color: Colors.purple,
-          icon: Icons.translate,
-        ),
-      );
-    }
-
-    // Add spacing between cards
-    if (cards.isNotEmpty) {
-      cards = cards
-          .expand((card) =>
-              [card, const SizedBox(height: 16)])
-          .toList();
-      cards.removeLast(); // Remove last spacing
-    }
-
-    return cards;
-  }
-
-  Widget _buildTranslationCard({
-    required String title,
-    required String text,
-    required String author,
-    required Color color,
-    required IconData icon,
-  }) {
+  // ── Word Meanings (collapsible) ──
+  Widget _buildWordMeanings() {
     return GlassCard(
       padding: const EdgeInsets.all(20),
-      borderColor: color.withAlpha(40),
+      borderColor: Colors.teal.withAlpha(40),
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          tilePadding: EdgeInsets.zero,
+          childrenPadding: const EdgeInsets.only(top: 12),
+          iconColor: AppColors.textWhite60,
+          collapsedIconColor: AppColors.textWhite40,
+          title: Row(
+            children: [
+              Icon(Icons.text_fields, size: 16, color: Colors.teal),
+              const SizedBox(width: 8),
+              Text(
+                'WORD MEANINGS',
+                style: AppTextStyles.badge.copyWith(
+                  fontSize: 11,
+                  color: Colors.teal,
+                  letterSpacing: 1.5,
+                ),
+              ),
+            ],
+          ),
+          children: [
+            Container(
+              height: 1,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.teal.withAlpha(0),
+                    Colors.teal.withAlpha(50),
+                    Colors.teal.withAlpha(0),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: widget.verse.wordMeanings.map((wm) {
+                return Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.teal.withAlpha(20),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.teal.withAlpha(40)),
+                  ),
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: wm.word,
+                          style: AppTextStyles.bodySmall.copyWith(
+                            color: Colors.teal.shade200,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                          ),
+                        ),
+                        if (wm.meaning.isNotEmpty) ...[
+                          TextSpan(
+                            text: ' — ',
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.textWhite40,
+                              fontSize: 12,
+                            ),
+                          ),
+                          TextSpan(
+                            text: wm.meaning,
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.textWhite70,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ── Translation Pills ──
+  Widget _buildTranslationPills() {
+    final translations = widget.verse.translations;
+    return SizedBox(
+      height: 40,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: translations.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
+        itemBuilder: (context, index) {
+          final t = translations[index];
+          final isSelected = index == _selectedTranslationIndex;
+          final label = t.authorName.isNotEmpty
+              ? t.authorName
+              : t.language.toUpperCase();
+          return GestureDetector(
+            onTap: () =>
+                setState(() => _selectedTranslationIndex = index),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppColors.primary.withAlpha(40)
+                    : AppColors.glassBg,
+                borderRadius: BorderRadius.circular(9999),
+                border: Border.all(
+                  color: isSelected
+                      ? AppColors.primary
+                      : AppColors.glassBorderLight,
+                  width: isSelected ? 1.5 : 1,
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  label,
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color:
+                        isSelected ? AppColors.primary : AppColors.textWhite60,
+                    fontWeight:
+                        isSelected ? FontWeight.w700 : FontWeight.w400,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSelectedTranslation() {
+    final translations = widget.verse.translations;
+    if (translations.isEmpty) return const SizedBox.shrink();
+    final idx = _selectedTranslationIndex.clamp(0, translations.length - 1);
+    final t = translations[idx];
+
+    // Pick color based on language
+    Color color;
+    IconData icon;
+    switch (t.language.toLowerCase()) {
+      case 'english':
+        color = Colors.blue;
+        icon = Icons.abc;
+        break;
+      case 'hindi':
+        color = Colors.orange;
+        icon = Icons.language;
+        break;
+      case 'sanskrit':
+        color = AppColors.primary;
+        icon = Icons.auto_stories;
+        break;
+      default:
+        color = Colors.purple;
+        icon = Icons.translate;
+    }
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      child: GlassCard(
+        key: ValueKey(t.id),
+        padding: const EdgeInsets.all(20),
+        borderColor: color.withAlpha(40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, size: 16, color: color),
+                const SizedBox(width: 8),
+                Text(
+                  t.language.toUpperCase(),
+                  style: AppTextStyles.badge.copyWith(
+                    fontSize: 11,
+                    color: color,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              height: 1,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    color.withAlpha(0),
+                    color.withAlpha(50),
+                    color.withAlpha(0),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              t.description,
+              style: AppTextStyles.quoteText.copyWith(
+                fontSize: 16,
+                height: 1.6,
+              ),
+              textAlign: TextAlign.justify,
+            ),
+            if (t.authorName.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  '— ${t.authorName}',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.textWhite60,
+                    fontSize: 12,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMeaningSection() {
+    return GlassCard(
+      padding: const EdgeInsets.all(20),
+      borderColor: AppColors.primary.withAlpha(40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Row(
             children: [
-              Icon(icon, size: 16, color: color),
+              Icon(Icons.lightbulb_outline,
+                  size: 16, color: AppColors.primary),
               const SizedBox(width: 8),
               Text(
-                title,
+                'MEANING',
                 style: AppTextStyles.badge.copyWith(
                   fontSize: 11,
-                  color: color,
+                  color: AppColors.primary,
                   letterSpacing: 1.5,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          
-          // Divider
           Container(
             height: 1,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  color.withAlpha(0),
-                  color.withAlpha(50),
-                  color.withAlpha(0),
+                  AppColors.primary.withAlpha(0),
+                  AppColors.primary.withAlpha(50),
+                  AppColors.primary.withAlpha(0),
                 ],
               ),
             ),
           ),
           const SizedBox(height: 12),
-
-          // Translation Text
           Text(
-            text,
-            style: AppTextStyles.quoteText.copyWith(
-              fontSize: 16,
+            widget.verse.meaning,
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textWhite,
               height: 1.6,
             ),
             textAlign: TextAlign.justify,
           ),
-
-          // Author
-          if (author.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: 12),
-              child: Text(
-                '— ${author}',
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.textWhite60,
-                  fontSize: 12,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ),
         ],
       ),
     );
@@ -532,7 +675,23 @@ class _VerseDetailScreenState extends State<VerseDetailScreen> {
     );
   }
 
+  Future<void> _shareVerse() async {
+    final v = widget.verse;
+    final provider =
+      Provider.of<AppStateProvider>(context, listen: false);
+    final text =
+        '"${v.meaning.isNotEmpty ? v.meaning : v.text}"\n\n'
+        '— Bhagavad Gita, Chapter ${v.chapterNumber}, Verse ${v.verseNumber}\n\n'
+        'Discover more wisdom in the Bhagavad Gita app.';
+    await SharePlus.instance.share(ShareParams(text: text));
+    provider.incrementShareCount();
+  }
+
   Widget _buildBottomActions() {
+    final provider = Provider.of<AppStateProvider>(context);
+    final isBookmarked = provider.isBookmarked(
+        widget.verse.chapterNumber, widget.verse.verseNumber);
+
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
@@ -544,6 +703,7 @@ class _VerseDetailScreenState extends State<VerseDetailScreen> {
               // Share button
               Expanded(
                 child: GlassCard(
+                  onTap: _shareVerse,
                   borderRadius: 9999,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   borderColor: AppColors.textWhite20,
@@ -568,13 +728,17 @@ class _VerseDetailScreenState extends State<VerseDetailScreen> {
               const SizedBox(width: 12),
               // Bookmark button
               GlassCard(
+                onTap: () => provider.toggleBookmark(
+                    widget.verse.chapterNumber, widget.verse.verseNumber),
                 borderRadius: 9999,
                 padding: const EdgeInsets.all(16),
-                borderColor: AppColors.textWhite20,
-                child: const Icon(
-                  Icons.bookmark,
+                borderColor: isBookmarked
+                    ? AppColors.primary.withAlpha(128)
+                    : AppColors.textWhite20,
+                child: Icon(
+                  isBookmarked ? Icons.bookmark : Icons.bookmark_border,
                   size: 20,
-                  color: AppColors.textWhite,
+                  color: isBookmarked ? AppColors.primary : AppColors.textWhite,
                 ),
               ),
             ],

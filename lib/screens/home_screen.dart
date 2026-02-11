@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../models/bhagavad_gita_model.dart';
 import '../providers/app_state_provider.dart';
 import '../services/api_service.dart';
@@ -101,16 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      // Notification bell
-                      GlassCard(
-                        borderRadius: 9999,
-                        padding: const EdgeInsets.all(12),
-                        child: const Icon(
-                          Icons.notifications_outlined,
-                          color: AppColors.textWhite,
-                          size: 22,
-                        ),
-                      ),
+
                     ],
                   );
                 },
@@ -147,7 +139,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const Spacer(),
-                      const Icon(Icons.mic, color: AppColors.textWhite40, size: 18),
                     ],
                   ),
                 ),
@@ -230,8 +221,8 @@ class _FeaturedVerseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AppStateProvider>(context);
-    final isFav =
-        provider.isFavorite(verse.chapterNumber, verse.verseNumber);
+    final isMarked =
+        provider.isBookmarked(verse.chapterNumber, verse.verseNumber);
 
     return GestureDetector(
       onTap: onTap,
@@ -281,7 +272,7 @@ class _FeaturedVerseCard extends StatelessWidget {
                       Row(
                         children: [
                           GestureDetector(
-                            onTap: () => provider.toggleFavorite(
+                            onTap: () => provider.toggleBookmark(
                               verse.chapterNumber,
                               verse.verseNumber,
                             ),
@@ -296,11 +287,11 @@ class _FeaturedVerseCard extends StatelessWidget {
                                 ),
                               ),
                               child: Icon(
-                                isFav
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
+                                isMarked
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border,
                                 size: 14,
-                                color: isFav
+                                color: isMarked
                                     ? AppColors.primary
                                     : AppColors.textWhite,
                               ),
@@ -308,18 +299,29 @@ class _FeaturedVerseCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(9999),
-                        ),
-                        child: Text(
-                          AppStrings.shareWisdom,
-                          style: AppTextStyles.buttonText,
+                      GestureDetector(
+                        onTap: () async {
+                          final shareText =
+                              '📖 Bhagavad Gita — Chapter ${verse.chapterNumber}, Verse ${verse.verseNumber}\n\n'
+                              '${verse.text}\n\n'
+                              '"${verse.meaning}"\n\n'
+                              '— From the Bhagavad Gita App';
+                          await SharePlus.instance.share(ShareParams(text: shareText));
+                          provider.incrementShareCount();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary,
+                            borderRadius: BorderRadius.circular(9999),
+                          ),
+                          child: Text(
+                            AppStrings.shareWisdom,
+                            style: AppTextStyles.buttonText,
+                          ),
                         ),
                       ),
                     ],

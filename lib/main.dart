@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'providers/app_state_provider.dart';
+import 'services/notification_service.dart';
 import 'screens/home_screen.dart';
 import 'screens/favorites_screen.dart';
 import 'screens/scriptures_overview_screen.dart';
@@ -26,6 +27,13 @@ void main() async {
 
   final provider = AppStateProvider();
   await provider.init();
+
+  // Track daily app open for consecutive-days streak
+  provider.trackAppOpen();
+
+  // Initialize notifications
+  await NotificationService.instance.init();
+  await NotificationService.instance.restoreSchedule();
 
   runApp(
     ChangeNotifierProvider.value(
@@ -108,6 +116,7 @@ class _MainShellState extends State<MainShell> {
     super.initState();
     // Pre-load chapters after build completes
     Future.microtask(() {
+      if (!mounted) return;
       context.read<AppStateProvider>().loadChapters();
     });
   }

@@ -46,8 +46,8 @@ class BottomNavBar extends StatelessWidget {
                   onTap: () => onTap(0),
                 ),
                 _NavItem(
-                  icon: Icons.favorite,
-                  label: 'SAVED',
+                  icon: Icons.bookmark,
+                  label: 'BOOKMARKS',
                   isActive: currentIndex == 1,
                   onTap: () => onTap(1),
                 ),

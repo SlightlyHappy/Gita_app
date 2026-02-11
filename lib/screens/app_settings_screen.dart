@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:in_app_review/in_app_review.dart';
 import '../providers/app_state_provider.dart';
+import '../services/notification_service.dart';
 import '../utils/constants.dart';
 import '../widgets/glass_card.dart';
 
 /// App Settings screen matching the mockup — appearance, notifications,
 /// typography, general actions.
+
+void _rescheduleIfEnabled(AppStateProvider appState) {
+  if (!appState.dailyQuotesEnabled) return;
+  int hour24 = appState.notificationHour;
+  if (!appState.isAM && hour24 != 12) hour24 += 12;
+  if (appState.isAM && hour24 == 12) hour24 = 0;
+  NotificationService.instance
+      .scheduleDailyQuote(hour: hour24, minute: appState.notificationMinute);
+}
+
 class AppSettingsScreen extends StatelessWidget {
   const AppSettingsScreen({super.key});
 
@@ -160,8 +174,19 @@ class AppSettingsScreen extends StatelessWidget {
                               ),
                               _GoldSwitch(
                                 value: appState.dailyQuotesEnabled,
-                                onChanged: (_) =>
-                                    appState.toggleDailyQuotes(),
+                                onChanged: (_) {
+                                    appState.toggleDailyQuotes();
+                                    if (appState.dailyQuotesEnabled) {
+                                      // Convert 12-hour to 24-hour
+                                      int hour24 = appState.notificationHour;
+                                      if (!appState.isAM && hour24 != 12) hour24 += 12;
+                                      if (appState.isAM && hour24 == 12) hour24 = 0;
+                                      NotificationService.instance.scheduleDailyQuote(
+                                          hour: hour24, minute: appState.notificationMinute);
+                                    } else {
+                                      NotificationService.instance.cancelAll();
+                                    }
+                                },
                               ),
                             ],
                           ),
@@ -209,21 +234,25 @@ class AppSettingsScreen extends StatelessWidget {
                                   _AmPmButton(
                                     label: 'AM',
                                     isSelected: appState.isAM,
-                                    onTap: () =>
+                                    onTap: () {
                                         appState.setNotificationTime(
                                             appState.notificationHour,
                                             appState.notificationMinute,
-                                            true),
+                                            true);
+                                        _rescheduleIfEnabled(appState);
+                                    },
                                   ),
                                   const SizedBox(height: 8),
                                   _AmPmButton(
                                     label: 'PM',
                                     isSelected: !appState.isAM,
-                                    onTap: () =>
+                                    onTap: () {
                                         appState.setNotificationTime(
                                             appState.notificationHour,
                                             appState.notificationMinute,
-                                            false),
+                                            false);
+                                        _rescheduleIfEnabled(appState);
+                                    },
                                   ),
                                 ],
                               ),
@@ -313,7 +342,14 @@ class AppSettingsScreen extends StatelessWidget {
                         _SettingsListTile(
                           icon: Icons.star_outline,
                           label: 'Rate the App',
-                          onTap: () {},
+                          onTap: () async {
+                            final inAppReview = InAppReview.instance;
+                            if (await inAppReview.isAvailable()) {
+                              inAppReview.requestReview();
+                            } else {
+                              inAppReview.openStoreListing();
+                            }
+                          },
                         ),
                         Container(
                           height: 1,
@@ -322,7 +358,16 @@ class AppSettingsScreen extends StatelessWidget {
                         _SettingsListTile(
                           icon: Icons.share,
                           label: 'Share with Friends',
-                          onTap: () {},
+                          onTap: () async {
+                            await SharePlus.instance.share(
+                              ShareParams(
+                                text:
+                                    'Discover the timeless wisdom of the Bhagavad Gita! '
+                                    'Download the Bhagavad Gita app and explore verses, '
+                                    'translations, and insights for your spiritual journey. 🙏✨',
+                              ),
+                            );
+                          },
                         ),
                         Container(
                           height: 1,
@@ -331,7 +376,21 @@ class AppSettingsScreen extends StatelessWidget {
                         _SettingsListTile(
                           icon: Icons.help_outline,
                           label: 'Contact Support',
-                          onTap: () {},
+                          onTap: () async {
+                            final uri = Uri(
+                              scheme: 'mailto',
+                              path: 'admin@bearsystems.in',
+                              queryParameters: {
+                                'subject': 'Bhagavad Gita App - Support Request',
+                                'body': 'Hi,\n\nI need help with:\n\n'
+                                    '---\n'
+                                    'App Version: ${AppStrings.appVersion}\n',
+                              },
+                            );
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(uri);
+                            }
+                          },
                         ),
                       ],
                     ),

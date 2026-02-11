@@ -77,7 +77,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       Text(AppStrings.saved, style: AppTextStyles.h1),
                       const SizedBox(height: 4),
                       Text(
-                        '${favKeys.length} saved verse${favKeys.length == 1 ? '' : 's'}',
+                        '${favKeys.length} bookmarked verse${favKeys.length == 1 ? '' : 's'}',
                         style: AppTextStyles.bodySmall,
                       ),
                     ],
@@ -99,7 +99,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                             borderColor: AppColors.glassBorder,
                           ),
                           child: const Icon(
-                            Icons.favorite_border,
+                            Icons.bookmark,
                             size: 36,
                             color: AppColors.primary,
                           ),
@@ -278,7 +278,7 @@ class _FavoriteVerseCard extends StatelessWidget {
             child: const Padding(
               padding: EdgeInsets.only(left: 8),
               child: Icon(
-                Icons.favorite,
+                Icons.bookmark,
                 size: 20,
                 color: AppColors.primary,
               ),

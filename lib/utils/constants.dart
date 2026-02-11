@@ -274,14 +274,16 @@ class AppStrings {
   static const String loading = 'Loading...';
   static const String error = 'An error occurred';
   static const String settings = 'Settings';
-  static const String saved = 'Saved';
+  static const String saved = 'Bookmarks';
   static const String home = 'Home';
   static const String originalSanskrit = 'ORIGINAL SANSKRIT';
   static const String translation = 'TRANSLATION';
   static const String relatedVerses = 'RELATED VERSES';
   static const String shareQuote = 'Share Quote';
-  static const String noFavorites = 'No saved verses yet';
-  static const String addFavorites = 'Tap the heart icon on any verse to save it here';
+  static const String noBookmarks = 'No bookmarked verses yet';
+  static const String addBookmarks = 'Tap the bookmark icon on any verse to save it here';
+  static const String noFavorites = 'No bookmarked verses yet';
+  static const String addFavorites = 'Tap the bookmark icon on any verse to save it here';
   static const String appVersion = 'GITA WISDOM V1.0.0';
 
   // Onboarding
@@ -324,4 +326,23 @@ class AppSpacing {
       EdgeInsets.symmetric(horizontal: 24);
   static const EdgeInsets cardPadding = EdgeInsets.all(24);
   static const EdgeInsets cardPaddingSmall = EdgeInsets.all(16);
+}
+
+// ─── Chapter Category Mappings ──────────────────────────────────────────────
+
+class ChapterCategories {
+  static const Map<String, List<int>> mappings = {
+    'Karma Yoga': [2, 3, 4, 5, 6],
+    'Bhakti Yoga': [9, 12],
+    'Jnana Yoga': [2, 4, 7, 8, 13, 15],
+    'Meditation': [6, 8, 12],
+    'Wisdom': [10, 11],
+  };
+
+  static List<String> get allFilters => ['All', ...mappings.keys];
+
+  static List<int> getChaptersForCategory(String category) {
+    if (category == 'All') return List.generate(18, (i) => i + 1);
+    return mappings[category] ?? [];
+  }
 }

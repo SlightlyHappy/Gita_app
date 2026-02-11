@@ -24,12 +24,7 @@ class _ScripturesOverviewScreenState extends State<ScripturesOverviewScreen> {
   String _activeFilter = 'All';
   Timer? _debounce;
 
-  static const List<String> _filters = [
-    'All',
-    'Karma Yoga',
-    'Bhakti Yoga',
-    'Jnana Yoga',
-  ];
+  List<String> get _filters => ChapterCategories.allFilters;
 
   @override
   void dispose() {
@@ -62,12 +57,11 @@ class _ScripturesOverviewScreenState extends State<ScripturesOverviewScreen> {
 
     // Category filter
     if (_activeFilter != 'All') {
-      filtered = filtered.where((c) {
-        final name = c.name.toLowerCase();
-        final meaning = c.meaning.toLowerCase();
-        final filter = _activeFilter.toLowerCase();
-        return name.contains(filter) || meaning.contains(filter);
-      }).toList();
+      final allowedChapters =
+          ChapterCategories.getChaptersForCategory(_activeFilter);
+      filtered = filtered
+          .where((c) => allowedChapters.contains(c.chapterNumber))
+          .toList();
     }
 
     return filtered;
