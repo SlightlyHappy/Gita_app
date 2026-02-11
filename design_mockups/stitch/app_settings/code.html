@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>App Settings - Bhagavad Gita Quotes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ecb613",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#16140d", // Darker neutral based on primary hue
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(45, 38, 20, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(236, 182, 19, 0.1);
+        }
+        .glass-darker {
+            background: rgba(20, 18, 12, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .cosmic-bg {
+            background: radial-gradient(circle at top right, #3d2f0a, #16140d 60%, #000000);
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: rgba(236, 182, 19, 0.2);
+            height: 6px;
+            border-radius: 999px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            background-color: #ecb613;
+            border-radius: 50%;
+            margin-top: -7px;
+            box-shadow: 0 0 10px rgba(236, 182, 19, 0.5);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto min-h-screen cosmic-bg relative overflow-hidden flex flex-col">
+<!-- Subtle Star Background -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" data-alt="Subtle stardust texture for cosmic background" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBJ575b-fVY6wqEwP9DO_KjuJ1BtcaQ-dEEChjq1Ad3TPhNi6xcUOlHRSB6eBcUMC_TQiz873bYZKaARDlku41tDzaPvAZVOxtyX3O0WAQVVza5r8KYGyP5j3apSbeT9spt2NpshsXCh9JL8n9-U8k913xSZ5k93xyst8A14RWBP5AyrH_MAkU0i1-njkd08vUdh5J97bc_7DXCYUjmIFQy0LOgD2IPTQmlzjZrFh2Jbsx2LqDrwv6NESa_9bCfvK1JsRnFjK_i8Nc');"></div>
+<!-- Header -->
+<header class="sticky top-0 z-20 px-6 pt-12 pb-6 flex items-center justify-between backdrop-blur-md">
+<h1 class="text-3xl font-bold tracking-tight">Settings</h1>
+<button class="px-4 py-2 rounded-full bg-primary/20 text-primary font-semibold text-sm border border-primary/30">
+                Done
+            </button>
+</header>
+<!-- Main Scrollable Content -->
+<main class="flex-1 px-5 pb-10 space-y-6 overflow-y-auto">
+<!-- Appearance Section -->
+<section class="space-y-3">
+<h2 class="px-2 text-xs font-bold uppercase tracking-widest text-primary/70">Appearance</h2>
+<div class="glass rounded-xl p-5 space-y-6">
+<!-- Dark Mode Toggle -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-icons text-primary">dark_mode</span>
+</div>
+<span class="font-medium">Dark Mode</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-14 h-8 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Theme Intensity Slider -->
+<div class="space-y-4">
+<div class="flex items-center justify-between text-sm">
+<span class="text-slate-400">Theme Intensity</span>
+<span class="text-primary font-mono">75%</span>
+</div>
+<input class="w-full" max="100" min="0" type="range" value="75"/>
+</div>
+</div>
+</section>
+<!-- Daily Notification Card -->
+<section class="space-y-3">
+<h2 class="px-2 text-xs font-bold uppercase tracking-widest text-primary/70">Inspiration</h2>
+<div class="glass rounded-xl overflow-hidden">
+<div class="p-5 flex items-center justify-between border-b border-white/5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-icons text-primary">notifications_active</span>
+</div>
+<div>
+<p class="font-medium">Daily Quotes</p>
+<p class="text-xs text-slate-400">Wisdom delivered daily</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-14 h-8 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Time Picker -->
+<div class="p-5 bg-primary/5 flex justify-center items-center gap-4">
+<div class="flex flex-col items-center">
+<div class="glass-darker w-16 h-20 rounded-xl flex items-center justify-center text-3xl font-light text-primary border border-primary/20">06</div>
+<span class="text-[10px] mt-2 uppercase tracking-tighter opacity-50">Hours</span>
+</div>
+<span class="text-2xl font-bold text-primary/50 mb-6">:</span>
+<div class="flex flex-col items-center">
+<div class="glass-darker w-16 h-20 rounded-xl flex items-center justify-center text-3xl font-light text-primary border border-primary/20">30</div>
+<span class="text-[10px] mt-2 uppercase tracking-tighter opacity-50">Minutes</span>
+</div>
+<div class="flex flex-col gap-2 ml-2">
+<button class="px-3 py-1 rounded-full bg-primary text-background-dark text-xs font-bold">AM</button>
+<button class="px-3 py-1 rounded-full bg-white/5 text-white/50 text-xs font-bold">PM</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Font Customization -->
+<section class="space-y-3">
+<h2 class="px-2 text-xs font-bold uppercase tracking-widest text-primary/70">Typography</h2>
+<div class="glass rounded-xl p-5 space-y-6">
+<div class="space-y-4">
+<div class="flex items-center justify-between text-sm">
+<span class="text-slate-400">Font Size</span>
+<div class="flex items-center gap-2">
+<span class="text-xs">A</span>
+<span class="text-lg font-bold">A</span>
+</div>
+</div>
+<input class="w-full" max="24" min="12" type="range" value="18"/>
+</div>
+<!-- Font Preview -->
+<div class="glass-darker p-4 rounded-lg border border-white/5">
+<p class="text-center italic text-sm text-slate-300">"You have the right to work, but for the work's sake only."</p>
+</div>
+</div>
+</section>
+<!-- Support & About -->
+<section class="space-y-3">
+<h2 class="px-2 text-xs font-bold uppercase tracking-widest text-primary/70">General</h2>
+<div class="glass rounded-xl overflow-hidden divide-y divide-white/5">
+<button class="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-icons text-primary/60 text-xl">star_outline</span>
+<span class="font-medium text-sm">Rate the App</span>
+</div>
+<span class="material-icons text-slate-600">chevron_right</span>
+</button>
+<button class="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-icons text-primary/60 text-xl">share</span>
+<span class="font-medium text-sm">Share with Friends</span>
+</div>
+<span class="material-icons text-slate-600">chevron_right</span>
+</button>
+<button class="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-icons text-primary/60 text-xl">help_outline</span>
+<span class="font-medium text-sm">Contact Support</span>
+</div>
+<span class="material-icons text-slate-600">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Footer Info -->
+<footer class="pt-4 pb-12 text-center space-y-2">
+<p class="text-[10px] uppercase tracking-widest text-primary/40">Gita Wisdom v2.4.0</p>
+<div class="flex justify-center gap-4 text-[10px] font-medium text-slate-500 uppercase tracking-tighter">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<span class="opacity-20">•</span>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</footer>
+</main>
+<!-- Dynamic Glass Navbar (iOS Style) -->
+<nav class="sticky bottom-0 w-full glass-darker border-t border-white/5 px-8 pt-3 pb-8 flex items-center justify-between z-30">
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-icons">auto_stories</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Gita</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-icons">favorite_border</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Saved</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-icons">settings</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Settings</span>
+</button>
+</nav>
+<!-- Decorative Nebula Glow -->
+<div class="absolute -bottom-20 -left-20 w-64 h-64 bg-primary/20 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
+</div>
+</body></html>

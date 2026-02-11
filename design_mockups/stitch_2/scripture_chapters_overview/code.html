@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ecb613",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#221d10",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(236, 182, 19, 0.1);
+        }
+        .cosmic-bg {
+            background: radial-gradient(circle at top right, #3a2e12 0%, #221d10 50%, #1a160d 100%);
+        }
+        .mandala-glow {
+            mask-image: radial-gradient(circle, black 0%, transparent 70%);
+            opacity: 0.15;
+            pointer-events: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-white font-display min-h-screen relative overflow-x-hidden">
+<!-- Cosmic Background Elements -->
+<div class="fixed inset-0 cosmic-bg -z-10"></div>
+<div class="fixed top-[-10%] right-[-10%] w-96 h-96 bg-primary/10 rounded-full blur-[100px] -z-10"></div>
+<div class="fixed bottom-[-10%] left-[-10%] w-96 h-96 bg-primary/5 rounded-full blur-[100px] -z-10"></div>
+<!-- Mandala Overlay -->
+<div class="fixed inset-0 mandala-glow -z-5 flex items-center justify-center">
+<img alt="Mandala Background" class="w-[150%] max-w-none opacity-20" data-alt="Intricate golden mandala geometric pattern overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYRRaXa3zKP_wcMPq8vg8kQNTX3mizlm-1T0zyA9Zm4iKsUILmyPbUA9hkwYt8-dlkxcaTap2dltQbm9EvINayL2v770AsR_feix31K-1RygApyu1d0welRI6ayNfke6WlzDEm_a-pANBc9AZ6Dv8XUVUFTI3i6x2XAIGYyouppRR-3qlI_t4XK1dvjD66JqXRCceOK-0IAMm2ms05KjB8W-hjx-km1389ZWVrzYEvLnsXKgEfclRd_U7U5a7O3TmPPkxv9TUOdAk"/>
+</div>
+<!-- Header Section -->
+<header class="sticky top-0 z-40 px-6 pt-12 pb-4 bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="flex justify-between items-center mb-6">
+<div>
+<p class="text-primary text-xs uppercase tracking-[0.2em] font-medium mb-1">Eternal Wisdom</p>
+<h1 class="text-3xl font-bold tracking-tight">Scripture Overview</h1>
+</div>
+<div class="w-12 h-12 rounded-full overflow-hidden border border-primary/30">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="User profile picture in a circle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk0FeDlK5GiKgpCjXhgSCJYdRKV0u7g18T9Yv779P4pYkNVZuvJ72Ba5fEDfA6JEhjV9PmQHJv-Z3sjnXLDzE_THE6k2sffkrZYKZoLjZwxnKloM69a5XXZ8Vv8j7FMwOUPdqiQe0AHvF7iVKB5STXEqUpo_Gjw0oxZKJ5qBFm83ZvpHGRt_Opck94aBE4G7nMD-PzMt1HEkNJg41o4W13unsN8qPbPw9fA7pxa6StY_0fHPb3MhRAWR38UY6V1-UZ_nqCC6gTULg"/>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="relative mb-6">
+<span class="material-icons-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60">search</span>
+<input class="w-full bg-white/5 border border-primary/20 rounded-full py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-white/30 text-sm" placeholder="Search chapters or verses..." type="text"/>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-3 overflow-x-auto no-scrollbar pb-2">
+<button class="bg-primary text-background-dark px-6 py-2 rounded-full text-sm font-semibold whitespace-nowrap">All Chapters</button>
+<button class="glass px-6 py-2 rounded-full text-sm font-medium whitespace-nowrap text-white/80 border-primary/10">Karma Yoga</button>
+<button class="glass px-6 py-2 rounded-full text-sm font-medium whitespace-nowrap text-white/80 border-primary/10">Bhakti Yoga</button>
+<button class="glass px-6 py-2 rounded-full text-sm font-medium whitespace-nowrap text-white/80 border-primary/10">Jnana Yoga</button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<main class="px-6 pt-6 pb-32 space-y-6">
+<!-- Chapter Card 1 -->
+<div class="glass rounded-xl p-6 relative overflow-hidden group transition-transform duration-300 active:scale-95">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-background-dark font-bold text-xl shadow-[0_0_20px_rgba(236,182,19,0.3)]">
+                        01
+                    </div>
+<div>
+<h2 class="text-xl font-bold text-white">Arjuna Vishada Yoga</h2>
+<p class="text-primary/70 text-xs font-medium uppercase tracking-wider">The Yoga of Dejection</p>
+</div>
+</div>
+<button class="text-primary/40 hover:text-primary transition-colors">
+<span class="material-icons-outlined">bookmark_border</span>
+</button>
+</div>
+<p class="text-white/60 text-sm leading-relaxed mb-4">
+                Arjuna experiences a profound crisis of conscience on the battlefield. This chapter sets the stage for the divine discourse between Krishna and the warrior prince.
+            </p>
+<div class="flex items-center gap-4 text-[10px] uppercase tracking-widest text-white/40 font-bold">
+<span class="flex items-center gap-1"><span class="material-icons-outlined text-xs">format_list_numbered</span> 47 Verses</span>
+<span class="flex items-center gap-1"><span class="material-icons-outlined text-xs">schedule</span> 12 Min Read</span>
+</div>
+</div>
+<!-- Chapter Card 2 -->
+<div class="glass rounded-xl p-6 relative overflow-hidden group transition-transform duration-300 active:scale-95">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-background-dark font-bold text-xl shadow-[0_0_20px_rgba(236,182,19,0.3)]">
+                        02
+                    </div>
+<div>
+<h2 class="text-xl font-bold text-white">Sankhya Yoga</h2>
+<p class="text-primary/70 text-xs font-medium uppercase tracking-wider">The Yoga of Knowledge</p>
+</div>
+</div>
+<button class="text-primary transition-colors">
+<span class="material-icons-outlined">bookmark</span>
+</button>
+</div>
+<p class="text-white/60 text-sm leading-relaxed mb-4">
+                Krishna explains the nature of the soul, the importance of duty without attachment, and the characteristics of a person with steady wisdom.
+            </p>
+<div class="flex items-center gap-4 text-[10px] uppercase tracking-widest text-white/40 font-bold">
+<span class="flex items-center gap-1"><span class="material-icons-outlined text-xs">format_list_numbered</span> 72 Verses</span>
+<span class="flex items-center gap-1"><span class="material-icons-outlined text-xs">schedule</span> 25 Min Read</span>
+</div>
+</div>
+<!-- Chapter Card 3 -->
+<div class="glass rounded-xl p-6 relative overflow-hidden group transition-transform duration-300 active:scale-95 border-primary/30">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-background-dark font-bold text-xl shadow-[0_0_20px_rgba(236,182,19,0.3)]">
+                        03
+                    </div>
+<div>
+<h2 class="text-xl font-bold text-white">Karma Yoga</h2>
+<p class="text-primary/70 text-xs font-medium uppercase tracking-wider">The Yoga of Action</p>
+</div>
+</div>
+<button class="text-primary/40 hover:text-primary transition-colors">
+<span class="material-icons-outlined">bookmark_border</span>
+</button>
+</div>
+<p class="text-white/60 text-sm leading-relaxed mb-4">
+                Krishna describes how to perform one's duties in the world without ego-driven desires, turning daily work into a form of spiritual practice.
+            </p>
+<div class="flex items-center gap-4 text-[10px] uppercase tracking-widest text-white/40 font-bold">
+<span class="flex items-center gap-1"><span class="material-icons-outlined text-xs">format_list_numbered</span> 43 Verses</span>
+<span class="flex items-center gap-1"><span class="material-icons-outlined text-xs">schedule</span> 15 Min Read</span>
+</div>
+</div>
+<!-- Chapter Card 4 -->
+<div class="glass rounded-xl p-6 relative overflow-hidden group transition-transform duration-300 active:scale-95">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-background-dark font-bold text-xl shadow-[0_0_20px_rgba(236,182,19,0.3)]">
+                        04
+                    </div>
+<div>
+<h2 class="text-xl font-bold text-white">Jnana Karma Yoga</h2>
+<p class="text-primary/70 text-xs font-medium uppercase tracking-wider">Transcendental Knowledge</p>
+</div>
+</div>
+<button class="text-primary/40 hover:text-primary transition-colors">
+<span class="material-icons-outlined">bookmark_border</span>
+</button>
+</div>
+<p class="text-white/60 text-sm leading-relaxed mb-4">
+                The history of the Gita is revealed. Krishna explains his divine nature and the path of purifying the heart through the fire of spiritual wisdom.
+            </p>
+<div class="flex items-center gap-4 text-[10px] uppercase tracking-widest text-white/40 font-bold">
+<span class="flex items-center gap-1"><span class="material-icons-outlined text-xs">format_list_numbered</span> 42 Verses</span>
+<span class="flex items-center gap-1"><span class="material-icons-outlined text-xs">schedule</span> 18 Min Read</span>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+<button class="w-16 h-16 bg-primary rounded-full shadow-[0_0_30px_rgba(236,182,19,0.5)] flex items-center justify-center text-background-dark transform transition-transform active:scale-90">
+<span class="material-icons-outlined text-3xl">home</span>
+</button>
+</div>
+<!-- Bottom Navigation Blur Effect -->
+<div class="fixed bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background-dark to-transparent pointer-events-none z-40"></div>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

@@ -1,0 +1,66 @@
+workflows:
+  flutter-android:
+    name: Flutter Android Build
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+    environment:
+      flutter: stable
+      groups:
+        - keystore_credentials  # Define in Codemagic UI
+    scripts:
+      - name: Get Flutter packages
+        script: flutter pub get
+      - name: Run analyzer
+        script: flutter analyze --no-fatal-infos
+      - name: Build APK (Debug)
+        script: flutter build apk --debug
+      - name: Build APK (Release)
+        script: flutter build apk --release
+      - name: Build AAB (Release)
+        script: flutter build appbundle --release
+    artifacts:
+      - build/app/outputs/flutter-apk/**/*.apk
+      - build/app/outputs/bundle/**/*.aab
+
+  flutter-ios:
+    name: Flutter iOS Build
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      groups:
+        - ios_credentials  # Define in Codemagic UI
+    scripts:
+      - name: Get Flutter packages
+        script: flutter pub get
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios
+          pod install
+      - name: Run analyzer
+        script: flutter analyze --no-fatal-infos
+      - name: Build iOS (Debug - No Codesign)
+        script: flutter build ios --debug --no-codesign
+      # For release builds, configure signing in Codemagic UI:
+      # - name: Build iOS (Release)
+      #   script: flutter build ios --release
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com  # Update this

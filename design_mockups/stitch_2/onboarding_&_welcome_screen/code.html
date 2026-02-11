@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gita Wisdom - Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ecb613",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#221d10",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            overflow: hidden;
+        }
+        .cosmic-gradient {
+            background: radial-gradient(circle at center, #3a321a 0%, #221d10 70%, #0c0a06 100%);
+        }
+        .mandala-glow {
+            filter: drop-shadow(0 0 30px rgba(236, 182, 19, 0.4));
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(236, 182, 19, 0.2);
+        }
+        .star-field {
+            background-image: radial-gradient(white, rgba(255,255,255,0.2) 2px, transparent 40px);
+            background-size: 100px 100px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-white font-display min-h-screen relative overflow-hidden">
+<!-- Cosmic Background Layer -->
+<div class="fixed inset-0 z-0 cosmic-gradient">
+<div class="absolute inset-0 opacity-20 star-field"></div>
+<!-- Decorative Glows -->
+<div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px]"></div>
+</div>
+<!-- Main Content Container (iOS Form Factor Simulation) -->
+<main class="relative z-10 flex flex-col items-center justify-between min-h-screen px-8 py-16 text-center max-w-md mx-auto">
+<!-- Top Section: Visual & Header -->
+<div class="w-full space-y-8 mt-10">
+<!-- Central Mandala Glow Icon -->
+<div class="relative mx-auto w-32 h-32 flex items-center justify-center">
+<div class="absolute inset-0 bg-primary/20 rounded-full blur-2xl mandala-glow"></div>
+<img alt="Sacred geometric mandala pattern" class="w-full h-full object-cover rounded-full mix-blend-screen opacity-80" data-alt="Intricate golden sacred geometry mandala pattern" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYbnPT5JXRG17vH6eTTyrnrMIvNC1qnHWUIgo6J8JJJuN3H3ZrzFC3tOqiTnpLj-1tMKISj2wI6485rtjCLG4aj5CX6cBgtZThSkq4p3QTQvWIeGhcHU8Y-2I5A0MzcN4hcdciEndqnJ7UazCgl1n6KL8N4BH1aeJA_EOnERekZ6gKWxBHeJSH6uwjv8SqXDQIrMb3P2PBf5wdZ5N6BrF4EEwsTEcfWdNWAAwsaASo9LXeTCMqdPH_Zs_mKKoR5p-GPwIKRNJOfBg"/>
+<div class="absolute inset-0 rounded-full border border-primary/40"></div>
+</div>
+<div class="space-y-3">
+<h1 class="text-4xl font-extrabold tracking-tight text-white">
+                    Begin Your <span class="text-primary">Wisdom</span>
+</h1>
+<p class="text-primary/60 text-sm font-medium uppercase tracking-widest">
+                    The Eternal Song Awaits
+                </p>
+</div>
+</div>
+<!-- Middle Section: Interaction -->
+<div class="w-full space-y-8">
+<!-- Name Input Field -->
+<div class="space-y-4 text-left">
+<label class="block text-xs font-semibold text-primary/70 uppercase tracking-widest pl-2" for="name">
+                    What shall we call you?
+                </label>
+<div class="relative group">
+<input class="w-full px-6 py-4 rounded-xl glass-panel text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300" id="name" name="name" placeholder="Enter your name" type="text"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-primary/40 group-focus-within:text-primary transition-colors">
+<span class="material-icons">self_improvement</span>
+</span>
+</div>
+</div>
+<!-- Language Chips -->
+<div class="space-y-4 text-left">
+<label class="block text-xs font-semibold text-primary/70 uppercase tracking-widest pl-2">
+                    Preferred Language
+                </label>
+<div class="flex gap-3">
+<button class="flex-1 py-3 px-4 rounded-lg bg-primary text-background-dark font-bold text-sm shadow-lg shadow-primary/20 transition-all">
+                        English
+                    </button>
+<button class="flex-1 py-3 px-4 rounded-lg glass-panel text-white/80 font-semibold text-sm hover:border-primary/50 transition-all">
+                        Sanskrit
+                    </button>
+<button class="flex-1 py-3 px-4 rounded-lg glass-panel text-white/80 font-semibold text-sm hover:border-primary/50 transition-all">
+                        Hindi
+                    </button>
+</div>
+</div>
+<!-- CTA Button -->
+<button class="w-full py-5 px-8 rounded-2xl bg-primary text-background-dark font-extrabold text-lg uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-xl shadow-primary/10 flex items-center justify-center gap-2">
+                Start Your Journey
+                <span class="material-icons">arrow_forward</span>
+</button>
+</div>
+<!-- Bottom Section: Footer -->
+<div class="w-full pt-12">
+<div class="flex flex-col items-center space-y-2 opacity-40">
+<span class="material-icons text-lg">keyboard_double_arrow_up</span>
+<p class="text-[10px] font-bold uppercase tracking-[0.3em]">Swipe to continue</p>
+</div>
+</div>
+</main>
+<!-- iOS Indicator Bar (Simulated) -->
+<div class="fixed bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-white/20 rounded-full z-20"></div>
+<!-- Decorative Elements -->
+<div class="fixed -bottom-48 -left-48 w-96 h-96 bg-primary/5 rounded-full blur-[80px] pointer-events-none"></div>
+<div class="fixed -top-48 -right-48 w-96 h-96 bg-primary/5 rounded-full blur-[80px] pointer-events-none"></div>
+</body></html>

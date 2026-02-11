@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bhagwad Gita - Daily Wisdom</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ecb613",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#0a0a1a", // Custom cosmic base
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(236, 182, 19, 0.2);
+        }
+        .cosmic-bg {
+            background: radial-gradient(circle at top right, #1e1b4b 0%, #0a0a1a 100%);
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+        .star-field {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 130px 80px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 160px 120px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0.15;
+            z-index: -1;
+        }
+        .mandala-glow {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(236, 182, 19, 0.08) 0%, rgba(236, 182, 19, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(40px);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            color: white;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark font-display">
+<!-- Cosmic Background Elements -->
+<div class="cosmic-bg"></div>
+<div class="star-field"></div>
+<div class="mandala-glow top-[-50px] left-[-100px]"></div>
+<div class="mandala-glow bottom-[100px] right-[-50px]"></div>
+<div class="relative flex min-h-screen w-full flex-col pb-24">
+<!-- Header -->
+<header class="flex items-center justify-between px-6 py-8 pt-12">
+<div class="flex items-center gap-3">
+<div class="size-12 rounded-full glass flex items-center justify-center border border-primary/30 overflow-hidden">
+<img alt="User Profile Image" class="w-full h-full object-cover" data-alt="Modern minimal portrait of a serene person profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0HPcIXUb4dO0XB9Rjx8eZu3xomaz-4X816dnN2xmGryy8_tBDTQLsKxapzohXIHsOpC2aawVTDgxF3NvaAbkKURbh8ZAYMcTKdQmVKJKs2OBIa-deI1bOa3zpCflB8iVR1MExmYpD2G_MPBC4Wzn6q1Y8CQ5G2qXpVWkBSJ4C8w-bOYofNF40WzvcHRd0j9qiav_FspY0fNJLdKzV33RLOVoBPcCZk4w0tmWZBh19-yMvZQ0O2FJ-TLMSpVrQq8k28b2-dboCMrs"/>
+</div>
+<div>
+<h1 class="text-lg font-bold tracking-tight text-white">Daily Wisdom</h1>
+<p class="text-xs text-primary/80 font-medium">Namaste, Arjuna</p>
+</div>
+</div>
+<button class="size-12 rounded-full glass flex items-center justify-center text-white">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</header>
+<!-- Search Bar -->
+<div class="px-6 pb-6">
+<div class="glass flex items-center gap-3 rounded-full px-5 py-3 border border-white/10">
+<span class="material-symbols-outlined text-primary">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-white placeholder-white/40 flex-1 text-sm font-light" placeholder="Search verses or topics..." type="text"/>
+<span class="material-symbols-outlined text-white/40 text-sm">mic</span>
+</div>
+</div>
+<!-- Verse Feed -->
+<main class="flex flex-col gap-6 px-6">
+<!-- Verse of the Day (Featured) -->
+<section class="flex flex-col gap-3">
+<h2 class="text-xs font-bold uppercase tracking-[0.2em] text-primary/60 ml-1">Verse of the Day</h2>
+<div class="glass relative overflow-hidden rounded-xl border-primary/40 p-6 shadow-2xl">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-6xl">format_quote</span>
+</div>
+<div class="relative z-10 flex flex-col gap-4">
+<span class="text-xs font-semibold text-primary/80">Chapter 2 • Verse 47</span>
+<p class="text-xl font-bold leading-relaxed text-white">कर्मण्येवाधिकारस्ते मा फलेषु कदाचन। मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥</p>
+<p class="text-base text-white/70 leading-relaxed italic">"You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions."</p>
+<div class="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border border-white/20 bg-primary/20 flex items-center justify-center text-[10px] font-bold">12k</div>
+<div class="size-8 rounded-full border border-white/20 bg-background-dark/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-xs">favorite</span>
+</div>
+</div>
+<button class="rounded-full bg-primary px-6 py-2 text-xs font-bold text-background-dark">
+                                SHARE WISDOM
+                            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Verse 2 -->
+<section class="flex flex-col gap-3">
+<div class="glass relative overflow-hidden rounded-xl border-white/10 p-6">
+<div class="relative z-10 flex flex-col gap-4">
+<span class="text-xs font-semibold text-primary/80">Chapter 6 • Verse 5</span>
+<p class="text-lg font-bold leading-relaxed text-white">उद्धरेदात्मनात्मानं नात्मानमवसादयेत्। आत्मैव ह्यात्मनो बन्धुरात्मैव रिपुरात्मनः॥</p>
+<p class="text-sm text-white/60 leading-relaxed">"Elevate yourself through the power of your mind, and not degrade yourself. For the mind can be the friend and also the enemy of the self."</p>
+<div class="flex items-center gap-4 pt-2">
+<button class="flex items-center gap-2 text-xs text-white/40 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">favorite</span> 842
+                            </button>
+<button class="flex items-center gap-2 text-xs text-white/40 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">bookmark</span> Save
+                            </button>
+<button class="flex items-center gap-2 text-xs text-white/40 hover:text-primary transition-colors ml-auto">
+<span class="material-symbols-outlined text-lg">ios_share</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Verse 3 - Image Card -->
+<section class="flex flex-col gap-3">
+<div class="glass relative overflow-hidden rounded-xl border-white/10 p-0">
+<div class="h-48 w-full overflow-hidden relative">
+<img alt="Peaceful Landscape" class="w-full h-full object-cover" data-alt="Peaceful mountain landscape at dawn with soft golden light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXAkw85c9fljjov987Ck-YeaLw8ZaViD7tWSLVhX-KZ74xJpvWB2OAFHBfqIc-B4i8mvabwh1G7rXSoMC6q3EkYwh-AQQfYCxc5rRPlsDthBZqp6UtVLH89rQSQu944e0mw_LrENz_dlSKHl2NrGCUF0TncAUezOSoOtWZK8etxiy2vm1cAX-hAgdlj9vrmnarD6em_2Z5m6ixX2v3VBLpFSlCSAclwtXBtQPNFJWp7XV5zF4rGkqK6ZBf-NCoxxOVmZHEk7d8Zko"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0a0a1a] to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="text-[10px] font-bold uppercase tracking-widest text-primary">Topic: Inner Peace</span>
+</div>
+</div>
+<div class="p-6 pt-0">
+<p class="text-lg font-bold leading-relaxed text-white mb-2">Chapter 2 • Verse 70</p>
+<p class="text-sm text-white/60 leading-relaxed italic">"As the ocean remains undisturbed by the incessant flow of waters, so the wise person remains unruffled by the flood of desires."</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-6 left-6 right-6 z-50">
+<div class="glass rounded-full border border-white/10 px-6 py-4 shadow-2xl flex items-center justify-between">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">potted_plant</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Saved</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Chapters</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Profile</span>
+</a>
+</div>
+</nav>
+<!-- iOS Home Indicator Overlay Mockup (Visual Only) -->
+<div class="fixed bottom-1 left-1/2 -translate-x-1/2 w-32 h-1 bg-white/20 rounded-full"></div>
+</div>
+</body></html>

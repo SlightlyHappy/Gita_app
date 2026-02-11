@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Loading Wisdom Transition</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Noto+Sans:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ecb613",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#0a0a0a",
+                    },
+                    fontFamily: {
+                        "display": ["Noto Serif", "serif"],
+                        "sans": ["Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .star-field {
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ecb613, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 130px 80px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 160px 120px, #ecb613, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0.3;
+        }
+        
+        .mandala-glow {
+            box-shadow: 0 0 60px 10px rgba(236, 182, 19, 0.15);
+        }
+
+        .shimmer-text {
+            background: linear-gradient(90deg, #ecb613 0%, #fff 50%, #ecb613 100%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-dark overflow-hidden">
+<!-- Background Star Field -->
+<div class="absolute inset-0 star-field"></div>
+<!-- Top Bar Navigation (Minimal for iOS) -->
+<div class="relative z-10 flex items-center justify-between p-6">
+<div class="text-white/60 hover:text-white transition-colors cursor-pointer">
+<span class="material-symbols-outlined">close</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="h-1 w-1 rounded-full bg-primary/40"></div>
+<div class="h-1 w-1 rounded-full bg-primary/40"></div>
+<div class="h-1 w-8 rounded-full bg-primary"></div>
+</div>
+<div class="w-6"></div> <!-- Spacer -->
+</div>
+<!-- Main Content Area -->
+<div class="relative z-10 flex flex-1 flex-col items-center justify-center px-8 text-center">
+<!-- Mandala Visual -->
+<div class="relative mb-12 flex items-center justify-center">
+<!-- Outer Glow -->
+<div class="absolute inset-0 rounded-full mandala-glow blur-2xl"></div>
+<!-- Rotating Mandala -->
+<div class="relative w-64 h-64 md:w-80 md:h-80 opacity-90">
+<div class="w-full h-full bg-center bg-no-repeat bg-contain" data-alt="Intricate golden mandala geometry rotating slowly" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC0MYwpUh81pcVtQB5I3tZXH-vlDMqCeSiZupvjDg6KFkH1jS9NBtuOjCSsZjNyltdo2b3FHKCajo_nPYWRssyScRFcq01t7bQAaLTIPTiXkLx24HgvGDK5lK9CKBt4Ouv3Gw20ryU1soOxBt5lGFL8klN69XYWe1s73xQq_SUDi0s5xwI8zPJxN_DF1oU29UHGGHwbf7f7l7-TBX6IQVWuOalMBrjqoARkpAGCHNlI8s086Nv34ZHSoWGanA_pwjboNKYYRCPoiuQ");'>
+</div>
+</div>
+<!-- Center Core -->
+<div class="absolute w-4 h-4 rounded-full bg-primary/20 blur-sm"></div>
+</div>
+<!-- Wisdom Quote -->
+<div class="space-y-6 max-w-sm">
+<h2 class="shimmer-text text-[28px] md:text-[32px] font-bold leading-tight tracking-tight">
+                    As Arjuna sought clarity...
+                </h2>
+<p class="text-white/80 text-lg font-normal leading-relaxed italic">
+                    ...may you find peace in this moment of stillness.
+                </p>
+</div>
+</div>
+<!-- Footer / Progress Area -->
+<div class="relative z-10 p-10 pb-16">
+<div class="flex flex-col items-center gap-6">
+<!-- Circular/Line Progress Mix -->
+<div class="w-full max-w-[240px] space-y-3">
+<div class="flex justify-between items-end px-1">
+<span class="text-primary/60 text-xs font-sans tracking-[0.2em] uppercase">Preparing Space</span>
+<span class="text-primary text-sm font-sans font-bold">72%</span>
+</div>
+<div class="h-[2px] w-full bg-primary/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary shadow-[0_0_10px_rgba(236,182,19,0.5)]" style="width: 72%;"></div>
+</div>
+</div>
+<!-- Footer Hint -->
+<p class="text-primary/40 text-xs font-sans tracking-widest uppercase">
+                    Take a deep breath
+                </p>
+</div>
+</div>
+<!-- Aesthetic Gradients for Depth -->
+<div class="pointer-events-none absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-background-dark to-transparent"></div>
+<div class="pointer-events-none absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-background-dark/80 to-transparent"></div>
+</div>
+</body></html>

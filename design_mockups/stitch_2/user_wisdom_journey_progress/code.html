@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Wisdom Journey Progress</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ecb613",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#120f08",
+                        "glass": "rgba(255, 255, 255, 0.05)",
+                        "glass-border": "rgba(236, 182, 19, 0.2)",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #120f08;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(236, 182, 19, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(236, 182, 19, 0.08) 0%, transparent 50%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(236, 182, 19, 0.15);
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-white min-h-screen pb-24">
+<!-- Header / Top Bar -->
+<header class="sticky top-0 z-50 px-6 pt-12 pb-6 bg-background-dark/80 backdrop-blur-md flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="w-12 h-12 rounded-full border-2 border-primary/50 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile picture with golden halo effect" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgwwwU44HGbvz6FnBj8cJbnlxbucTjWFEMAy5u9DpYjlh4f1euL3kk_pRUzywMF6CffroUmPbnzEVdOi9s7Q3XKx-ldmHuAoAqTfnF27YaqfpygE2pegmh4ACx5FhkUiF9addxZz-hCdKt0l7UN8_M0RVAdoP2dHaKhBoDt8LrF6tLErrv3AzdbTOAv0njfmjVFfpec26ai-OvcP7RVt97_436zEwVwc_84OXTwBcdEppI7y6-rRH_1HCILu9vnrpaywuYeETXnGo"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-primary text-black rounded-full p-0.5 flex items-center justify-center border-2 border-background-dark">
+<span class="material-symbols-outlined text-xs font-bold">verified</span>
+</div>
+</div>
+<div>
+<p class="text-xs text-primary/70 uppercase tracking-widest font-semibold">Seeker Level 4</p>
+<h1 class="text-xl font-bold">Aria's Wisdom</h1>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<!-- Main Content Scroll Area -->
+<main class="px-6 space-y-8">
+<!-- Streak Counter -->
+<section class="glass-card rounded-xl p-6 flex items-center justify-between overflow-hidden relative">
+<div class="absolute -right-4 top-0 opacity-10">
+<span class="material-symbols-outlined text-9xl text-primary">local_fire_department</span>
+</div>
+<div class="z-10">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary fill-1">local_fire_department</span>
+<span class="text-primary font-bold tracking-wider">MEDITATION STREAK</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-5xl font-bold">24</span>
+<span class="text-primary/70 text-lg">Days</span>
+</div>
+</div>
+<div class="z-10 text-right">
+<p class="text-xs text-white/50 mb-2">Next Milestone: 30 Days</p>
+<div class="w-32 h-1.5 bg-white/10 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[80%] shadow-[0_0_10px_#ecb613]"></div>
+</div>
+</div>
+</section>
+<!-- Current Chapters - Progress Rings -->
+<section>
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-xl font-bold">Active Journeys</h2>
+<button class="text-primary text-sm font-medium">View All</button>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+<!-- Chapter 1 -->
+<div class="glass-card rounded-xl p-4 min-w-[160px] flex flex-col items-center text-center">
+<div class="relative w-20 h-20 mb-3">
+<svg class="w-full h-full">
+<circle class="text-white/10" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-primary progress-ring-circle" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-dasharray="213.6" stroke-dashoffset="42.7" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<span class="absolute inset-0 flex items-center justify-center font-bold text-sm">80%</span>
+</div>
+<p class="text-sm font-semibold leading-tight">Arjuna Vishada Yoga</p>
+<p class="text-[10px] text-white/40 mt-1 uppercase tracking-tighter">Chapter 1</p>
+</div>
+<!-- Chapter 2 -->
+<div class="glass-card rounded-xl p-4 min-w-[160px] flex flex-col items-center text-center border-primary/40">
+<div class="relative w-20 h-20 mb-3">
+<svg class="w-full h-full">
+<circle class="text-white/10" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-primary progress-ring-circle" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-dasharray="213.6" stroke-dashoffset="117.5" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<span class="absolute inset-0 flex items-center justify-center font-bold text-sm">45%</span>
+</div>
+<p class="text-sm font-semibold leading-tight">Sankhya Yoga</p>
+<p class="text-[10px] text-primary mt-1 uppercase tracking-tighter font-bold">RESUME STUDY</p>
+</div>
+<!-- Chapter 3 -->
+<div class="glass-card rounded-xl p-4 min-w-[160px] flex flex-col items-center text-center">
+<div class="relative w-20 h-20 mb-3">
+<svg class="w-full h-full">
+<circle class="text-white/10" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-primary progress-ring-circle" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-dasharray="213.6" stroke-dashoffset="192.2" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<span class="absolute inset-0 flex items-center justify-center font-bold text-sm">10%</span>
+</div>
+<p class="text-sm font-semibold leading-tight">Karma Yoga</p>
+<p class="text-[10px] text-white/40 mt-1 uppercase tracking-tighter">Chapter 3</p>
+</div>
+</div>
+</section>
+<!-- Achievement Badges -->
+<section>
+<h2 class="text-xl font-bold mb-4">Cosmic Achievements</h2>
+<div class="flex gap-6 overflow-x-auto pb-2">
+<div class="flex flex-col items-center gap-2">
+<div class="w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-orange-400 flex items-center justify-center shadow-[0_0_15px_rgba(236,182,19,0.4)]">
+<span class="material-symbols-outlined text-black font-bold text-3xl">auto_awesome</span>
+</div>
+<span class="text-[10px] text-center font-medium">First Verse</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-amber-200 flex items-center justify-center shadow-[0_0_15px_rgba(236,182,19,0.4)]">
+<span class="material-symbols-outlined text-black font-bold text-3xl">self_improvement</span>
+</div>
+<span class="text-[10px] text-center font-medium">Zen Master</span>
+</div>
+<div class="flex flex-col items-center gap-2 opacity-40 grayscale">
+<div class="w-16 h-16 rounded-full glass-card flex items-center justify-center">
+<span class="material-symbols-outlined text-white/50 text-3xl">workspace_premium</span>
+</div>
+<span class="text-[10px] text-center font-medium">100 Days</span>
+</div>
+<div class="flex flex-col items-center gap-2 opacity-40 grayscale">
+<div class="w-16 h-16 rounded-full glass-card flex items-center justify-center">
+<span class="material-symbols-outlined text-white/50 text-3xl">stars</span>
+</div>
+<span class="text-[10px] text-center font-medium">Sage Status</span>
+</div>
+</div>
+</section>
+<!-- Vertical Wisdom Journey Timeline -->
+<section class="pb-10">
+<h2 class="text-xl font-bold mb-6">Wisdom Timeline</h2>
+<div class="relative ml-4 pl-8 border-l-2 border-dashed border-primary/30 space-y-12">
+<!-- Node 1: Completed -->
+<div class="relative">
+<div class="absolute -left-[45px] top-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-black shadow-[0_0_15px_#ecb613]">
+<span class="material-symbols-outlined text-sm font-bold">check</span>
+</div>
+<div>
+<p class="text-primary text-xs font-bold mb-1">COMPLETED • OCT 12</p>
+<h3 class="text-lg font-bold">The Way of Intellect</h3>
+<p class="text-sm text-white/60">Introduction to the internal battle of consciousness.</p>
+</div>
+</div>
+<!-- Node 2: Current -->
+<div class="relative">
+<div class="absolute -left-[45px] top-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-black border-4 border-background-dark ring-4 ring-primary/20">
+<span class="material-symbols-outlined text-sm font-bold">play_arrow</span>
+</div>
+<div class="glass-card rounded-xl p-4 border-primary/50 bg-primary/5">
+<p class="text-primary text-xs font-bold mb-1">IN PROGRESS</p>
+<h3 class="text-lg font-bold">The Divine Vision</h3>
+<p class="text-sm text-white/80">Understanding the universal form of the creator.</p>
+<button class="mt-4 w-full bg-primary text-black font-bold py-2 rounded-lg text-sm">Continue Journey</button>
+</div>
+</div>
+<!-- Node 3: Locked -->
+<div class="relative opacity-40">
+<div class="absolute -left-[45px] top-0 w-8 h-8 rounded-full glass-card border-white/20 flex items-center justify-center text-white/50">
+<span class="material-symbols-outlined text-sm">lock</span>
+</div>
+<div>
+<p class="text-white/40 text-xs font-bold mb-1">LOCKED</p>
+<h3 class="text-lg font-bold">Mastery of Action</h3>
+<p class="text-sm text-white/60">Unlock by completing Chapter 11.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-6 left-6 right-6 h-20 glass-card rounded-full px-6 flex items-center justify-between z-50 border-white/10 shadow-2xl">
+<a class="flex flex-col items-center gap-1 text-white/40" href="#">
+<span class="material-symbols-outlined">house</span>
+<span class="text-[10px] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">insights</span>
+<span class="text-[10px] font-bold">Journey</span>
+</a>
+<div class="relative -top-6">
+<button class="w-16 h-16 rounded-full bg-primary text-black flex items-center justify-center shadow-[0_10px_20px_rgba(236,182,19,0.4)] border-4 border-background-dark">
+<span class="material-symbols-outlined text-3xl font-bold">self_improvement</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-white/40" href="#">
+<span class="material-symbols-outlined">library_books</span>
+<span class="text-[10px] font-medium">Verses</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-white/40" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</nav>
+<!-- Background Decoration Particles -->
+<div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+<div class="absolute top-1/4 left-1/4 w-1 h-1 bg-white rounded-full animate-pulse opacity-20"></div>
+<div class="absolute top-1/2 right-1/3 w-2 h-2 bg-primary rounded-full animate-pulse opacity-10"></div>
+<div class="absolute bottom-1/4 left-1/2 w-1 h-1 bg-white rounded-full animate-pulse opacity-30"></div>
+<div class="absolute top-10 right-10 w-1 h-1 bg-primary rounded-full animate-pulse opacity-20"></div>
+</div>
+</body></html>

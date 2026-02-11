@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gita Wisdom - Widget Preview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ecb613",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#221d10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>.glass {
+    background: rgba(34, 29, 16, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(236, 182, 19, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(236, 182, 19, 0.05)
+    }
+.glass-badge {
+    background: rgba(236, 182, 19, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(236, 182, 19, 0.4)
+    }
+.cosmic-bg {
+    background-image: linear-gradient(to bottom, rgba(34, 29, 16, 0.9), rgba(34, 29, 16, 0.7)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuAzFHaFE7WdIuOeWkFlYFKEBbihHeOYWw_9J1H6ipGzR1g6m_9cPZrHSyuKGa1CjP4xTvA-5mSfKc1_cQa2CxDB9npQmEaQioTnJ590fAJkvDMmY_kzK3i3BnVUBFoitTud01Yh_7kSlsxUrzd6MKmU0pJNIVa0RL5hIZTEbdzZvqha6XfL7-h_GP0PPh6w9nA3zx9Y8MqO35_C1mi9E7mQiRM5jRN12g-c-HbaxkjorKMcu8ZufD7bOAFEV9CNpMYG82IriVCEtoo);
+    background-size: cover;
+    background-position: center
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-white min-h-screen flex items-center justify-center p-4">
+<!-- Phone Container Simulation -->
+<div class="relative w-full max-w-[430px] aspect-[9/19.5] bg-black rounded-[3rem] p-4 shadow-2xl border-[8px] border-zinc-800 overflow-hidden cosmic-bg" data-alt="Deep space nebula with golden stars">
+<!-- Status Bar -->
+<div class="flex justify-between items-center px-8 pt-4 pb-2 mb-6">
+<span class="text-sm font-semibold">9:41</span>
+<div class="flex gap-2 items-center">
+<span class="material-icons text-sm">signal_cellular_alt</span>
+<span class="material-icons text-sm">wifi</span>
+<span class="material-icons text-sm">battery_full</span>
+</div>
+</div>
+<!-- Home Screen Content -->
+<div class="space-y-6 px-4 overflow-y-auto max-h-[85vh] no-scrollbar">
+<!-- Section Title (App Gallery Context) -->
+<div class="px-2 mb-2">
+<h2 class="text-xl font-bold text-primary">Widget Previews</h2>
+<p class="text-xs text-primary/60">Gita Daily Wisdom</p>
+</div>
+<!-- Small Widget (2x2) -->
+<div class="grid grid-cols-2 gap-4">
+<div class="aspect-square glass rounded-lg p-4 flex flex-col justify-between relative group">
+<div class="glass-badge rounded-full px-2 py-0.5 w-fit flex items-center gap-1">
+<span class="material-icons text-[10px] text-primary">auto_awesome</span>
+<span class="text-[8px] font-bold text-primary uppercase tracking-widest">Daily</span>
+</div>
+<div class="text-center">
+<p class="text-[10px] text-primary/70 mb-1">कर्मण्येवाधिकारस्ते</p>
+<p class="text-xs font-medium leading-tight">Focus on your duty, not the fruit.</p>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-[8px] text-primary/40">2:47</span>
+<span class="material-icons text-primary/40 text-sm">temple_hindu</span>
+</div>
+</div>
+<!-- Mock App Icons to fill space -->
+<div class="grid grid-cols-2 grid-rows-2 gap-4">
+<div class="bg-primary/10 rounded-lg flex items-center justify-center opacity-40">
+<span class="material-icons text-primary text-xl">self_improvement</span>
+</div>
+<div class="bg-primary/10 rounded-lg flex items-center justify-center opacity-40">
+<span class="material-icons text-primary text-xl">book</span>
+</div>
+<div class="bg-primary/10 rounded-lg flex items-center justify-center opacity-40">
+<span class="material-icons text-primary text-xl">psychology</span>
+</div>
+<div class="bg-primary/10 rounded-lg flex items-center justify-center opacity-40">
+<span class="material-icons text-primary text-xl">history_edu</span>
+</div>
+</div>
+</div>
+<!-- Medium Widget (4x2) -->
+<div class="glass w-full rounded-lg p-5 flex flex-col justify-between aspect-[2/1] relative">
+<div class="flex justify-between items-start">
+<div class="glass-badge rounded-full px-3 py-1 flex items-center gap-1.5">
+<span class="material-icons text-[12px] text-primary">stars</span>
+<span class="text-[10px] font-bold text-primary uppercase tracking-widest font-display">Daily Wisdom</span>
+</div>
+<span class="text-[10px] text-primary/50 font-medium">CHAPTER 18:66</span>
+</div>
+<div class="my-3 text-center">
+<p class="text-xs text-primary font-medium italic mb-1">सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज |</p>
+<p class="text-sm font-medium leading-snug text-white/90">Abandon all varieties of religion and just surrender unto Me.</p>
+</div>
+<div class="flex justify-center gap-4 border-t border-primary/10 pt-2">
+<div class="flex items-center gap-1 opacity-60">
+<span class="material-icons text-[10px]">share</span>
+<span class="text-[8px]">Share</span>
+</div>
+<div class="flex items-center gap-1 opacity-60">
+<span class="material-icons text-[10px]">favorite_border</span>
+<span class="text-[8px]">Reflect</span>
+</div>
+</div>
+</div>
+<!-- Large Widget (4x4) -->
+<div class="glass w-full rounded-lg aspect-square p-6 flex flex-col relative overflow-hidden">
+<!-- Decorative Mandala Watermark -->
+<div class="absolute -right-8 -bottom-8 opacity-10 pointer-events-none">
+<span class="material-icons text-[180px] text-primary">spa</span>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<div class="glass-badge rounded-full px-4 py-1.5 flex items-center gap-2">
+<span class="material-icons text-[14px] text-primary">local_fire_department</span>
+<span class="text-[11px] font-bold text-primary uppercase tracking-widest">Shloka of the Day</span>
+</div>
+</div>
+<div class="flex-grow flex flex-col justify-center gap-4 relative z-10">
+<div class="space-y-2">
+<p class="text-sm text-primary font-semibold leading-relaxed">
+                            यदा यदा हि धर्मस्य ग्लानिर्भवति भारत |<br/>
+                            अभ्युत्थानमधर्मस्य तदात्मानं सृजाम्यहम् ||
+                        </p>
+</div>
+<div class="w-12 h-0.5 bg-primary/30 rounded-full"></div>
+<div class="space-y-3">
+<p class="text-base font-light text-white/95 leading-relaxed italic">
+                            "Whenever there is a decline in righteousness and an increase in unrighteousness, O Arjuna, then I manifest Myself."
+                        </p>
+<div class="flex items-center gap-2">
+<span class="h-px flex-grow bg-white/10"></span>
+<span class="text-[10px] font-bold text-primary tracking-widest">CH 4, VERSE 7</span>
+<span class="h-px flex-grow bg-white/10"></span>
+</div>
+</div>
+</div>
+<div class="mt-auto flex justify-between items-center text-primary/60">
+<div class="flex gap-4">
+<span class="material-icons text-xl hover:text-primary transition-colors cursor-pointer">volume_up</span>
+<span class="material-icons text-xl hover:text-primary transition-colors cursor-pointer">bookmark_border</span>
+</div>
+<div class="bg-primary/20 p-2 rounded-full">
+<span class="material-icons text-primary text-xl">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Bottom Indicator for iPhone -->
+<div class="w-32 h-1.5 bg-white/20 rounded-full mx-auto mt-8 mb-2"></div>
+</div>
+<!-- App Dock Simulation (Floating Style) -->
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-[85%] h-20 glass rounded-lg flex items-center justify-around px-2 mb-4">
+<div class="w-12 h-12 bg-zinc-800/80 rounded-lg flex items-center justify-center">
+<span class="material-icons text-zinc-400">chat</span>
+</div>
+<div class="w-12 h-12 bg-zinc-800/80 rounded-lg flex items-center justify-center">
+<span class="material-icons text-zinc-400">explore</span>
+</div>
+<div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(236,182,19,0.5)]">
+<span class="material-icons text-black">auto_stories</span>
+</div>
+<div class="w-12 h-12 bg-zinc-800/80 rounded-lg flex items-center justify-center">
+<span class="material-icons text-zinc-400">settings</span>
+</div>
+</div>
+</div>
+</body></html>
